@@ -126,7 +126,7 @@ export default async function DeepPage() {
                 <ProvenanceChip p={round} />
               </div>
               <div className="space-y-3">
-                <CodeBlock label="Request" lang="bash" code={`curl https://<this-site>/api/deep\n\n# upstream (no CORS, 5–11 s):\ncurl https://deep.seer.pm/.netlify/functions/get-originality-r3-v3-markets-data`} />
+                <CodeBlock label="Request" lang="bash" code={`curl https://seer-quiet-field.vercel.app/api/deep\n\n# upstream (no CORS, 5–11 s):\ncurl https://deep.seer.pm/.netlify/functions/get-originality-r3-v3-markets-data`} />
                 <CodeBlock label="Response (excerpt)" code={agentJson} />
               </div>
             </div>

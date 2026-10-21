@@ -10,7 +10,7 @@ const sans = Instrument_Sans({ subsets: ["latin"], variable: "--font-sans-face",
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono-face", display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3100"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://seer-quiet-field.vercel.app"),
   title: { default: "Seer — Decision infrastructure", template: "%s · Seer" },
   description:
     "Six connected Seer interfaces on the Electric Foundation kit, running on live Seer market data.",
