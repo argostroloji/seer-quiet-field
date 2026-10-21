@@ -7,3 +7,5 @@ qa/*.png
 !qa/.gitkeep
 tsconfig.tsbuildinfo
 next-env.d.ts
+qa/*.json
+qa/_*
