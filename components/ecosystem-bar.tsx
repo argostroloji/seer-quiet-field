@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { APPS } from "@/lib/apps";
 import { SeerMark } from "./mark";
+import { AgentButton } from "./agent-drawer";
 
 function isActive(path: string, href: string) {
   if (href === "/") return path === "/" || path === "/about";
@@ -54,6 +55,7 @@ export function EcosystemBar() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-1.5">
+          <AgentButton />
           <ThemeToggle />
           <ConnectDemo />
         </div>

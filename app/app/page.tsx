@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { searchMarkets, type SearchParams } from "@/lib/seer/api";
+import { CATEGORIES, KINDS, SORTS, explore, parseQuery, type SP } from "@/lib/seer/explore";
 import { CHAINS, KIND_LABEL, fmtPct, fmtUSD, visibleOutcomes } from "@/lib/seer/normalize";
 import type { Market } from "@/lib/seer/types";
 import { MarketCard, marketHref, ChainBadge, StatusDot, Thumb, MarketRowMeta } from "@/components/market-card";
@@ -9,65 +9,10 @@ import { MetaRule, PosterTitle } from "@/components/poster";
 
 export const metadata: Metadata = { title: "Seer app — every market", description: "Search, filter and inspect every Seer market across chains." };
 
-type SP = Record<string, string | string[] | undefined>;
-const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? "";
-
-const STATUS_GROUPS: Record<string, { label: string; api: string[] }> = {
-  trading: { label: "Open", api: ["not_open", "open"] },
-  answering: { label: "Answer pending", api: ["answer_not_final"] },
-  dispute: { label: "In dispute", api: ["in_dispute"] },
-  resolved: { label: "Resolved", api: ["pending_execution", "closed"] },
-};
-const SORTS: Record<string, { label: string; orderBy: SearchParams["orderBy"]; dir: "asc" | "desc" }> = {
-  liquidityUSD: { label: "Liquidity", orderBy: "liquidityUSD", dir: "desc" },
-  volumeUSD: { label: "Volume", orderBy: "volumeUSD", dir: "desc" },
-  ending: { label: "Ending soon", orderBy: "openingTs", dir: "asc" },
-  newest: { label: "Recently created", orderBy: "creationDate", dir: "desc" },
-};
-const CATEGORIES = ["elections", "politics", "crypto", "sports", "science", "economy", "weather", "misc"];
-const KINDS = ["binary", "categorical", "multi-categorical", "scalar", "futarchy"] as const;
-const isAddr = (s: string) => /^0x[0-9a-fA-F]{40}$/.test(s.trim());
-
 export default async function AppPage({ searchParams }: { searchParams: Promise<SP> }) {
-  const sp = await searchParams;
-  const q = one(sp.q).trim();
-  const status = one(sp.status) || "trading";
-  const chain = one(sp.chain);
-  const cat = one(sp.cat);
-  const kind = one(sp.kind);
-  const sort = SORTS[one(sp.sort)] ? one(sp.sort) : "liquidityUSD";
-  const view = one(sp.view) === "table" ? "table" : "cards";
-  const verified = one(sp.verified) === "1";
-  const page = Math.max(1, Number(one(sp.page)) || 1);
-  const PER = 24;
-
-  const base: SearchParams = {
-    chainsList: chain ? [chain] : [],
-    marketStatusList: status === "all" ? [] : STATUS_GROUPS[status]?.api ?? [],
-    categoryList: cat ? [cat] : [],
-    verificationStatusList: verified ? ["verified"] : [],
-    type: kind === "futarchy" ? "Futarchy" : kind ? "Generic" : "",
-    orderBy: SORTS[sort].orderBy,
-    orderDirection: SORTS[sort].dir,
-    limit: kind && kind !== "futarchy" ? 200 : PER,
-    page: kind && kind !== "futarchy" ? 1 : page,
-    // hide empty test markets unless the user is looking at resolved/all or searching
-    minLiquidity: status === "trading" && !q && !verified ? 1 : undefined,
-  };
-
-  // Etherscan-style: a 0x string may be a market, or a creator — ask for both.
-  const res = isAddr(q)
-    ? await Promise.all([searchMarkets({ ...base, marketStatusList: [], minLiquidity: undefined, marketIds: [q] }), searchMarkets({ ...base, marketStatusList: [], minLiquidity: undefined, creator: q.toLowerCase() })]).then(([a, b]) => ({
-        ...a,
-        data: { markets: [...a.data.markets, ...b.data.markets.filter((m) => m.id !== q.toLowerCase())], count: a.data.count + b.data.count, pages: 1 },
-      }))
-    : await searchMarkets({ ...base, marketName: q || undefined });
-
-  let markets = res.data.markets;
-  if (kind && kind !== "futarchy") markets = markets.filter((m) => m.kind === kind);
-  const total = kind && kind !== "futarchy" ? markets.length : res.data.count;
-  if (kind && kind !== "futarchy") markets = markets.slice((page - 1) * PER, page * PER);
-  const pages = Math.max(1, Math.ceil(total / PER));
+  const Q = parseQuery(await searchParams);
+  const { q, status, chain, cat, kind, sort, view, verified, page } = Q;
+  const { res, markets, total, pages } = await explore(Q);
 
   const href = (patch: Record<string, string | null>) => {
     const p = new URLSearchParams();

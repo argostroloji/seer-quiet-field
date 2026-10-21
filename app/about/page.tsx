@@ -21,7 +21,7 @@ const DEPARTURES = [
   ["Two extra surface steps", "A hover surface (#26262C) and a hairline divider (#2A2A31) between the kit's nested surface and its text colours. Dense tables need them."],
   ["Kit typo fixed", "The Figma palette labels Button Primary as 67676F in both modes, but the swatch is violet. We use #7C33FF, the value the Brandbook gives and the pixels confirm."],
   ["Prices vs. probabilities", "Seer pools are independent, so raw prices don't sum to 1 (a binary can read 35¢ / 75¢). We show the raw price in ¢ and a normalised probability that sums to 100%, and we label which is which."],
-  ["New components", "The kit doesn't cover these, so we designed them in its grammar: the ecosystem bar, the data-provenance chip, the shared-scale futarchy fork, the blind-review table, the Deep field plot, the risk scale, the agent view and the resolution timeline."],
+  ["New components", "The kit doesn't cover these, so we designed them in its grammar: the ecosystem bar, the data-provenance chip, the futarchy fork, the blind-review table, the Deep field plot, the risk scale, the resolution timeline and the agent-view drawer (a dark machine panel over the light page)."],
   ["Density", "Explorer and comparison views use the kit's card and row radii (10 and 6 px) at tighter spacing, with optional tables, because comparison needs aligned columns."],
   ["Mark", "The hexagonal S is redrawn from the Brandbook's 45° construction for this prototype. It's not the production vector."],
   ["Navigation", "The kit's single-site top bar becomes one ecosystem bar: an index (01–06) shared by all six surfaces, with a violet rule under the app you're in."],
@@ -74,6 +74,20 @@ export default function AboutPage() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section className="mt-16" aria-labelledby="agent-h">
+        <h2 id="agent-h" className="text-[24px] font-medium tracking-[-0.02em]">Read by people and by agents</h2>
+        <p className="mt-2 max-w-[70ch] text-[14px] leading-relaxed text-text-2">
+          Deep exists so AI agents can trade, so every page here has a JSON twin. The <span className="num text-text">{"{ }"} Agent view</span> button in the top bar opens the live JSON for the page you&apos;re on, filters included, with curl, JavaScript and Python snippets. Responses share one envelope (schema, purpose, provenance, data) and are read-only. Agents never have to scrape a page built for people, and people can see exactly what agents read.
+        </p>
+        <ul className="num mt-4 flex flex-wrap gap-x-6 gap-y-2 text-[13px]">
+          <li><Link href="/api" className="text-signal hover:underline">/api</Link> <span className="text-text-2">— index</span></li>
+          <li><Link href="/llms.txt" className="text-signal hover:underline">/llms.txt</Link> <span className="text-text-2">— site map for language models</span></li>
+          <li><Link href="/api/markets?status=trading" className="text-signal hover:underline">/api/markets</Link></li>
+          <li><Link href="/api/futarchy" className="text-signal hover:underline">/api/futarchy</Link></li>
+          <li><Link href="/api/risk" className="text-signal hover:underline">/api/risk</Link></li>
+        </ul>
       </section>
 
       <section className="mt-16" aria-labelledby="src-h">

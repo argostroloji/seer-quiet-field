@@ -18,3 +18,13 @@ export const APPS: {
 
 /** Submission name — single source of truth (title, /about, preview, claim). */
 export const SUBMISSION = { name: "Quiet Field", tagline: "One clear signal against a quiet, neutral field." };
+
+/** JSON twin of each page (agent view). */
+export const AGENT_API: Record<AppKey, string> = {
+  home: "/api/home",
+  app: "/api/markets",
+  deep: "/api/deep",
+  futarchy: "/api/futarchy",
+  opportunity: "/api/opportunity",
+  risk: "/api/risk",
+};
