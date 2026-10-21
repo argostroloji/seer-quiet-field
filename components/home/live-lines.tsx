@@ -58,7 +58,7 @@ export function LiveLines({ markets, total }: { markets: LineMarket[]; total: nu
         if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); setPaused(true); setActive((a) => (a - 1 + markets.length) % markets.length); }
       }}
     >
-      <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" className="block h-[82vh] max-h-[860px] min-h-[560px] w-full" aria-hidden="true">
+      <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" className="block h-[62vh] max-h-[860px] min-h-[480px] w-full sm:h-[82vh] sm:min-h-[600px]" aria-hidden="true">
         {/* 12-column hairline grid */}
         {Array.from({ length: 13 }, (_, k) => (
           <line key={k} x1={(W / 12) * k} x2={(W / 12) * k} y1={0} y2={H} stroke="var(--text)" strokeOpacity="0.05" />
@@ -93,7 +93,7 @@ export function LiveLines({ markets, total }: { markets: LineMarket[]; total: nu
       </svg>
 
       {/* the signal readout, sitting on the violet line */}
-      <div className="pointer-events-none absolute right-4 top-[56%] w-[min(380px,38%)] -translate-y-[calc(100%+18px)] text-right sm:right-8">
+      <div className="pointer-events-none px-4 pt-2 sm:absolute sm:right-8 sm:top-[56%] sm:w-[min(380px,38%)] sm:-translate-y-[calc(100%+18px)] sm:px-0 sm:pt-0 sm:text-right">
         <p className="num text-[11px] uppercase tracking-[0.14em] text-muted">
           Live signal · {active + 1}/{markets.length}
         </p>
@@ -101,7 +101,7 @@ export function LiveLines({ markets, total }: { markets: LineMarket[]; total: nu
         <p className="mt-2 text-[13px] text-text">“{cur?.lead}”</p>
         <p className="mt-1 line-clamp-2 text-[12.5px] leading-snug text-text-2">{cur?.title}</p>
       </div>
-      <div className="absolute right-4 top-[56%] mt-4 text-right sm:right-8">
+      <div className="px-4 pb-6 pt-2 sm:absolute sm:right-8 sm:top-[56%] sm:mt-4 sm:px-0 sm:pb-0 sm:pt-0 sm:text-right">
         {cur && (
           <Link href={`/app/market/${cur.chainId}/${cur.id}`} className="num text-[12px] text-signal underline-offset-4 hover:underline">
             Open this market →

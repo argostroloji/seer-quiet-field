@@ -13,14 +13,12 @@ const prov = <T,>(s: Sourced<T>): Provenance => ({ source: s.source, href: s.hre
 
 function Tile({ app, href, value, label, sub, p }: { app: string; href: string; value: string; label: string; sub?: string; p: Provenance }) {
   return (
-    <li className="flex min-w-0 flex-col justify-between gap-4 bg-card p-4">
-      <div className="flex items-center justify-between gap-2">
-        <Link href={href} className="num text-[10.5px] uppercase tracking-[0.14em] text-muted hover:text-text">{app} →</Link>
-      </div>
+    <li className="group flex min-w-0 flex-col justify-between gap-6 border-b border-text/15 py-5 pr-4 xl:border-b-0 xl:border-l xl:pl-5 xl:first:border-l-0 xl:first:pl-0">
       <div className="min-w-0">
-        <p className="num truncate text-[26px] leading-none tracking-[-0.02em]" title={value}>{value}</p>
-        <p className="mt-2 line-clamp-2 text-[12.5px] leading-snug text-text-2">{label}</p>
-        {sub && <p className="mt-1 truncate text-[11.5px] text-muted">{sub}</p>}
+        <Link href={href} className="num text-[10.5px] uppercase tracking-[0.14em] text-text-2 hover:text-signal">{app} →</Link>
+        <p className="num mt-3 truncate text-[30px] leading-[0.9] sm:text-[44px] tracking-[-0.04em] group-first:text-signal" title={value}>{value}</p>
+        <p className="mt-3 line-clamp-2 text-[13px] leading-snug">{label}</p>
+        {sub && <p className="num mt-1 truncate text-[11.5px] text-text-2">{sub}</p>}
       </div>
       <ProvenanceChip p={p} compact className="self-start" />
     </li>
@@ -42,7 +40,7 @@ export async function LiveStrip() {
   const oTop = opp.data.entries[0];
 
   return (
-    <ul className="grid gap-px overflow-hidden rounded-[10px] bg-line grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+    <ul className="grid grid-cols-2 gap-x-4 lg:grid-cols-3 xl:grid-cols-6 xl:gap-x-0">
       <Tile app="Seer app" href="/app" value={stats.data.markets.toLocaleString("en-US")} label="markets created on Seer" sub={`${stats.data.openMarkets.toLocaleString("en-US")} still open`} p={prov(stats)} />
       <Tile app="Volume" href="/app?sort=volumeUSD" value={fmtUSD(stats.data.volumeUSD)} label="traded across the 1,000 largest markets" sub={`${fmtUSD(stats.data.liquidityUSD)} liquidity`} p={prov(stats)} />
       <Tile app="Deep" href="/deep" value={leader ? fmtPct(leader.score, 0) : "—"} label={leader ? `top originality forecast: ${leader.repo}` : "Deep Funding round"} sub={`${deep.data.repos.length} repos in the field`} p={prov(deep)} />

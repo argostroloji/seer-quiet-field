@@ -4,8 +4,8 @@ import { SeerMark } from "./mark";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-line">
-      <div className="mx-auto grid max-w-[1320px] gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.2fr_2fr]">
+    <footer className="mt-28 border-t border-text/85">
+      <div className="mx-auto grid max-w-[1440px] gap-8 px-4 py-10 sm:px-8 md:grid-cols-[1.2fr_2fr]">
         <div>
           <div className="flex items-center gap-1.5">
             <SeerMark size={18} />

@@ -21,28 +21,31 @@ export function EcosystemBar() {
     if (el && ul && ul.scrollWidth > ul.clientWidth) ul.scrollTo({ left: el.offsetLeft - ul.clientWidth / 2 + el.offsetWidth / 2 });
   }, [path]);
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-page/85 backdrop-blur-md supports-[backdrop-filter]:bg-page/70">
-      <div className="mx-auto flex h-14 max-w-[1320px] items-center gap-3 px-4 sm:px-6">
-        <Link href="/" className="flex shrink-0 items-center gap-1.5 rounded-md pr-2" aria-label="Seer home">
-          <SeerMark size={20} className="text-text" />
+    <header className="sticky top-0 z-40 border-b border-text/85 bg-page/90 backdrop-blur-md">
+      <div className="mx-auto flex h-[52px] max-w-[1440px] items-stretch gap-4 px-4 sm:px-8">
+        <Link href="/" className="flex shrink-0 items-center gap-1.5 pr-2" aria-label="Seer home">
+          <SeerMark size={19} className="text-text" />
           <span className="text-[19px] font-semibold leading-none tracking-[-0.045em]">seer</span>
         </Link>
 
         <nav aria-label="Seer ecosystem" className="relative min-w-0 flex-1">
-          <ul ref={navRef} className="scrollbar-none flex items-center gap-0.5 overflow-x-auto [mask-image:linear-gradient(90deg,#000_88%,transparent)] md:[mask-image:none]">
+          <ul ref={navRef} className="scrollbar-none flex h-full items-stretch overflow-x-auto [mask-image:linear-gradient(90deg,#000_86%,transparent)] md:[mask-image:none]">
             {APPS.map((a, i) => {
               const active = isActive(path, a.href);
               return (
-                <li key={a.key} className="shrink-0">
+                <li key={a.key} className="relative shrink-0">
                   <Link
                     href={a.href}
                     aria-current={active ? "page" : undefined}
-                    className={`group flex h-9 items-center gap-1.5 rounded-md px-2.5 text-[13.5px] transition-colors ${
-                      active ? "bg-primary text-on-primary" : "text-text-2 hover:bg-nested hover:text-text"
-                    }`}
+                    className={`group flex h-full items-center gap-1 px-3 text-[13.5px] transition-colors ${active ? "text-text" : "text-text-2 hover:text-text"}`}
                   >
-                    <span className={`num text-[10px] ${active ? "text-white" : "text-muted"}`}>0{i + 1}</span>
+                    <sup className={`num -mt-2 text-[9.5px] ${active ? "text-signal" : "text-muted"}`}>0{i + 1}</sup>
                     {a.short}
+                    <span
+                      aria-hidden="true"
+                      className={`absolute inset-x-3 -bottom-px h-[3px] transition-transform duration-300 ${active ? "scale-x-100 bg-primary" : "scale-x-0 bg-text group-hover:scale-x-100"}`}
+                      style={{ transformOrigin: "left" }}
+                    />
                   </Link>
                 </li>
               );
@@ -60,9 +63,9 @@ export function EcosystemBar() {
 }
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light">("light");
   useEffect(() => {
-    setTheme((document.documentElement.dataset.theme as "dark" | "light") || "dark");
+    setTheme((document.documentElement.dataset.theme as "dark" | "light") || "light");
   }, []);
   const next = theme === "dark" ? "light" : "dark";
   return (
@@ -103,7 +106,7 @@ function ConnectDemo() {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="h-9 rounded-full bg-text px-3.5 text-[13px] font-medium text-page hover:opacity-90"
+        className="h-9 rounded-full border border-text px-3.5 text-[13px] font-medium text-text transition-colors hover:bg-text hover:text-page"
       >
         Connect<span className="hidden sm:inline"> wallet</span>
       </button>

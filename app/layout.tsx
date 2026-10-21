@@ -28,7 +28,7 @@ const themeScript = `try{var t=localStorage.getItem("seer-theme");if(t==="light"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="dark" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" data-theme="light" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <Script id="theme" strategy="beforeInteractive">{themeScript}</Script>
       </head>
