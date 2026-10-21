@@ -3,18 +3,20 @@ import { chromium } from "playwright";
 import fs from "node:fs";
 const base = process.argv[2] || "http://localhost:3200";
 const name = process.argv[3] || "Quiet Field";
+// [path, label, selector to scroll to so the signature visual is in frame]
 const pages = [
-  ["/", "01 Seer"], ["/app", "02 Seer app"], ["/deep", "03 Deep"],
-  ["/futarchy", "04 Futarchy"], ["/opportunity", "05 Opportunity Markets"], ["/risk", "06 Risk Pricing"],
+  ["/", "01 Seer", null], ["/app", "02 Seer app", null], ["/deep", "03 Deep", "svg[aria-label^='Distribution']"],
+  ["/futarchy", "04 Futarchy", "figure[aria-label^='If it passes']"], ["/opportunity?m=rebrand", "05 Opportunity Markets", "[role=img][aria-label^='Top entry']"], ["/risk", "06 Risk Pricing", "#scale-h"],
 ];
 const b = await chromium.launch();
 const ctx = await b.newContext({ viewport: { width: 1440, height: 1000 }, colorScheme: "light" });
 const p = await ctx.newPage();
 const shots = [];
-for (const [path] of pages) {
+for (const [path, , sel] of pages) {
   await p.goto(base + path, { waitUntil: "networkidle" });
   await p.addStyleTag({ content: "nextjs-portal{display:none!important}" });
-  await p.waitForTimeout(500);
+  if (sel) await p.evaluate((q) => { const el = document.querySelector(q); if (el) window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 150); }, sel);
+  await p.waitForTimeout(700);
   shots.push((await p.screenshot({ type: "jpeg", quality: 88 })).toString("base64"));
 }
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>
@@ -32,7 +34,7 @@ h1{position:absolute;left:44px;top:70px;font-size:150px;font-weight:500;letter-s
 .cap{font-family:'Geist Mono',monospace;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;padding:9px 12px;display:flex;justify-content:space-between}
 .cap b{color:#6C2BD9;font-weight:400}.cap span:last-child{color:#12875A}
 </style></head><body>
-<svg class="lines" viewBox="0 0 1600 1000">${Array.from({ length: 30 }, (_, i) => `<line x1="${1600 - i * 0}" y1="${-300 + i * 30}" x2="1180" y2="170" stroke="#17171C" stroke-opacity="${i === 9 ? 0 : 0.14}" stroke-width="1"/>`).join("")}<line x1="1600" y1="-30" x2="1180" y2="170" stroke="#7C33FF" stroke-width="3"/><circle cx="1180" cy="170" r="26" fill="#F7F7F9" stroke="#7C33FF" stroke-width="2"/><g transform="translate(1164 154)"><path d="M11 3h17.5l-5.2 8H13.6l-3.9 6H1.5z" fill="#17171C"/><path d="M21 29H3.5l5.2-8h9.7l3.9-6h8.2z" fill="#17171C"/></g><line x1="1180" y1="170" x2="980" y2="170" stroke="#7C33FF" stroke-width="3"/></svg>
+<svg class="lines" viewBox="0 0 1600 1000">${Array.from({ length: 26 }, (_, i) => `<line x1="1600" y1="${70 + i * 9}" x2="1180" y2="170" stroke="${i === 4 ? "#7C33FF" : "#17171C"}" stroke-opacity="${i === 4 ? 1 : 0.16}" stroke-width="${i === 4 ? 2.5 : 1}"/>`).join("")}<circle cx="1180" cy="170" r="26" fill="#F7F7F9" stroke="#7C33FF" stroke-width="2"/><g transform="translate(1164 154)"><path d="M11 3h17.5l-5.2 8H13.6l-3.9 6H1.5z" fill="#17171C"/><path d="M21 29H3.5l5.2-8h9.7l3.9-6h8.2z" fill="#17171C"/></g><line x1="1180" y1="170" x2="980" y2="170" stroke="#7C33FF" stroke-width="3"/></svg>
 <div class="rule"><span><b>Seer</b> — six interfaces · Electric Foundation</span><span>live on Seer data · <b>poidh #38</b></span></div>
 <h1>${name}</h1>
 <p class="sub">Seer's six apps as Swiss posters, every motif <em>drawn from live markets</em>: one clear signal against a quiet, neutral field.</p>

@@ -10,12 +10,12 @@ X: @argostroloji
 
 Quiet Field: Seer's six interfaces on the Electric Foundation kit, running on Seer's live data.
 
-The Brandbook asks for "one clear signal against a quiet, neutral field." Each page is a neutral field of real Seer data, with violet marking the one thing that page answers. One ecosystem bar and one set of market components connect all six. Every number comes from Seer's public endpoints (markets-search, market-chart, the indexer, Deep, the futarchy registry and candles, risk.seer.pm). Each panel shows its source and fetch time, and falls back to a dated snapshot if an endpoint fails. Deep, Futarchy and Opportunity say it in the UI: markets inform, people decide.
+The Brandbook sets the palette apart from "trading-platform aesthetics", pointing to "the calm authority of Swiss modernism" and "one clear signal against a quiet, neutral field". We took that literally. The six apps are editorial posters on the kit's light surfaces (dark is one click away), and violet appears once per screen. The EF motifs are drawn from data. On the homepage, every converging line is a live market weighted by liquidity, and they resolve through the Seer mark into one signal. Every number comes from Seer's public endpoints, and each panel shows its source and when it was fetched. Markets inform; people decide.
 
 Highlights:
 - Deep: all 98 Round 3 repos as a dot field with a review threshold, plus a check of the resolved L1 market against the jury's actual weights. Agent view with a JSON API.
-- Futarchy: pass and fail on one shared scale against the proposal's own ±1% decision band, with live candles.
-- Opportunity: 3 chained 80-outcome markets merged into one ranking that sums to 100%. Blind review, and your shortlist vs. the market's. The market ranked Electric Foundation #1 at 78% before Seer chose it.
+- Futarchy: the trunk is the proposal's real hourly price, forking at "now" into pass and fail, read against the proposal's own ±1% band.
+- Opportunity: 100% of the probability as one page-wide band. 3 chained markets are merged into one ranking. Blind review, and your shortlist vs. the market's. The market ranked Electric Foundation #1 at 78% before Seer chose it.
 - Risk: 33 assets on one log scale, with compare and exposure views and an as-of date.
 - Lighthouse 100/100/100 on all six pages.
 
@@ -27,7 +27,7 @@ Departures from the EF kit:
 5. Fixed the kit's Button Primary label typo; we use #7C33FF.
 6. Prices in ¢, alongside normalised probabilities that sum to 100%.
 7. New components in the kit's grammar: provenance chip, futarchy fork, blind review, field plot, risk scale, agent view.
-8. The mark is redrawn from the 45° construction.
+8. The mark is redrawn from the 45° construction; editorial ink rules replace nested cards.
 
 1. Seer homepage: https://seer-quiet-field.vercel.app/
 2. Seer app: https://seer-quiet-field.vercel.app/app
