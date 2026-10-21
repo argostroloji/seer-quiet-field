@@ -132,7 +132,7 @@ export default async function AppPage({ searchParams }: { searchParams: Promise<
           {q && <> matching “<span className="text-text">{q}</span>”</>}
         </p>
         <div className="flex flex-wrap items-center gap-2">
-          <Link href={href({ verified: verified ? null : "1", page: null })} aria-pressed={verified} className={`h-8 rounded-md px-3 text-[12.5px] leading-8 ${verified ? "bg-secondary text-secondary-text" : "text-text-2 hover:bg-nested"}`}>
+          <Link href={href({ verified: verified ? null : "1", page: null })} aria-current={verified ? "true" : undefined} className={`h-8 rounded-md px-3 text-[12.5px] leading-8 ${verified ? "bg-secondary text-secondary-text" : "text-text-2 hover:bg-nested"}`}>
             {verified ? "✓ " : ""}Kleros-verified only
           </Link>
           <span className="mx-1 h-5 w-px bg-line" aria-hidden="true" />
@@ -148,6 +148,7 @@ export default async function AppPage({ searchParams }: { searchParams: Promise<
 
       {res.mode === "snapshot" && <div className="mt-4"><ErrorNote>Seer&apos;s API didn&apos;t answer, so you&apos;re seeing the dated snapshot (21 Oct 2026). Filters apply to that snapshot only.</ErrorNote></div>}
 
+      <h2 className="sr-only">Results</h2>
       <div className="mt-4">
         {markets.length === 0 ? (
           <Empty>No markets match. Try another status, or search for a market or creator address.</Empty>

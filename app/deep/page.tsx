@@ -142,7 +142,7 @@ function Stat({ k, v, s }: { k: string; v: string; s?: string }) {
     <div className="min-w-0 bg-card p-4">
       <dt className="text-[11.5px] text-text-2">{k}</dt>
       <dd className="num mt-1 truncate text-[24px] tracking-tight">{v}</dd>
-      {s && <p className="mt-0.5 truncate text-[11.5px] text-muted">{s}</p>}
+      {s && <dd className="mt-0.5 truncate text-[11.5px] text-muted">{s}</dd>}
     </div>
   );
 }

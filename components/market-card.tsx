@@ -97,10 +97,10 @@ function BinaryRow({ m }: { m: Market }) {
       </div>
       <div className="grid grid-cols-2 gap-1.5">
         <span className="flex h-9 items-center justify-center gap-1.5 truncate rounded-md bg-primary px-2 text-[12.5px] text-on-primary">
-          <span className="truncate">{a?.name}</span> <span className="num opacity-80">{fmtCents(a?.price)}</span>
+          <span className="truncate">{a?.name}</span> <span className="num">{fmtCents(a?.price)}</span>
         </span>
         <span className="flex h-9 items-center justify-center gap-1.5 truncate rounded-md bg-secondary px-2 text-[12.5px] text-secondary-text">
-          <span className="truncate">{b?.name}</span> <span className="num opacity-80">{fmtCents(b?.price)}</span>
+          <span className="truncate">{b?.name}</span> <span className="num">{fmtCents(b?.price)}</span>
         </span>
       </div>
     </div>

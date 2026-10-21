@@ -59,7 +59,7 @@ export default async function OpportunityPage({ searchParams }: { searchParams: 
             className={`flex h-10 shrink-0 items-center gap-2 rounded-md px-3.5 text-[13.5px] ${k === t.k ? "bg-primary text-on-primary" : "bg-card text-text-2 hover:text-text"}`}
           >
             {t.label}
-            <span className={`num rounded px-1.5 py-px text-[9.5px] uppercase tracking-wider ${k === t.k ? "bg-white/15" : t.tag === "Live" ? "bg-up/15 text-up" : "bg-nested text-muted"}`}>{t.tag}</span>
+            <span className={`num rounded px-1.5 py-px text-[9.5px] uppercase tracking-wider ${k === t.k ? "text-white" : t.tag === "Live" ? "bg-up/15 text-up" : "bg-nested text-muted"}`}>{t.tag}</span>
           </Link>
         ))}
       </div>

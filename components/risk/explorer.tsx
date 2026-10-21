@@ -172,8 +172,8 @@ export function RiskExplorer({ data, classes }: { data: RiskData; classes: Asset
           <label className="mt-4 block text-[12px] text-text-2" htmlFor="lgd">Loss if a default happens: <span className="num text-text">{Math.round(lgd * 100)}%</span></label>
           <input id="lgd" type="range" min={0.1} max={1} step={0.05} value={lgd} onChange={(e) => setLgd(Number(e.target.value))} className="mt-2 w-full accent-[var(--primary)]" />
           <dl className="mt-4 grid grid-cols-2 gap-2">
-            <div className="rounded-md bg-nested p-3"><dt className="text-[11px] text-text-2">Expected loss / yr</dt><dd className="num text-[22px]">${el.toFixed(0)}</dd><p className="num text-[11px] text-muted">{total ? ((el / total) * 100).toFixed(2) : "0"}% of ${total.toLocaleString("en-US")}</p></div>
-            <div className="rounded-md bg-nested p-3"><dt className="text-[11px] text-text-2">≥ 1 of these defaults</dt><dd className="num text-[22px]">{fmt(anyDefault)}</dd><p className="text-[11px] text-muted">if independent</p></div>
+            <div className="rounded-md bg-nested p-3"><dt className="text-[11px] text-text-2">Expected loss / yr</dt><dd className="num text-[22px]">${el.toFixed(0)}</dd><dd className="num text-[11px] text-muted">{total ? ((el / total) * 100).toFixed(2) : "0"}% of ${total.toLocaleString("en-US")}</dd></div>
+            <div className="rounded-md bg-nested p-3"><dt className="text-[11px] text-text-2">≥ 1 of these defaults</dt><dd className="num text-[22px]">{fmt(anyDefault)}</dd><dd className="text-[11px] text-muted">if independent</dd></div>
           </dl>
           <p className="mt-3 text-[11.5px] leading-relaxed text-muted">An estimate from market prices, not insurance or advice. Defaults are correlated in a crisis, so treat the combined figure as a floor.</p>
         </section>

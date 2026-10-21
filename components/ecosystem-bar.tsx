@@ -41,7 +41,7 @@ export function EcosystemBar() {
                       active ? "bg-primary text-on-primary" : "text-text-2 hover:bg-nested hover:text-text"
                     }`}
                   >
-                    <span className={`num text-[10px] ${active ? "text-white/70" : "text-muted"}`}>0{i + 1}</span>
+                    <span className={`num text-[10px] ${active ? "text-white" : "text-muted"}`}>0{i + 1}</span>
                     {a.short}
                   </Link>
                 </li>
