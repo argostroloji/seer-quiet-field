@@ -47,21 +47,28 @@ export function OpportunityBoard({ m }: { m: OppMarket }) {
   return (
     <div className="space-y-4">
       {/* Probabilities visibly sum to 100% */}
-      <div className="rounded-[10px] bg-card p-4 sm:p-5">
-        <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-          <p className="text-[13px] font-medium">Where the market puts 100% of the selection probability</p>
-          <p className="num text-[11.5px] text-muted">hover a segment</p>
+      <div className="border-t border-text/85 pt-3">
+        <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+          <p className="num text-[10.5px] uppercase tracking-[0.14em] text-text-2">100% of the selection probability, one band</p>
+          <p className="num text-[10.5px] uppercase tracking-[0.14em] text-text-2">{ranked.length} entries</p>
         </div>
-        <div className={`flex h-10 overflow-hidden rounded-md ${blind ? "blur-sm" : ""}`} role="img" aria-label={`Top entry ${band.top[0]?.name} at ${pct(band.top[0]?.prob ?? 0)}; ${ranked.length} entries in total`}>
+        <div className={`flex h-36 overflow-hidden sm:h-56 ${blind ? "blur-md" : ""}`} role="img" aria-label={`Top entry ${band.top[0]?.name} at ${pct(band.top[0]?.prob ?? 0)}; ${ranked.length} entries in total`}>
           {band.top.map((e, i) => (
             <div
               key={e.name}
               title={`${e.name} · ${pct(e.prob)}`}
-              className="h-full border-r border-page/60 transition-[filter] hover:brightness-125"
+              className="relative h-full overflow-hidden border-r-2 border-page transition-[filter] hover:brightness-110"
               style={{ width: `${+((e.prob / band.total) * 100).toFixed(3)}%`, background: i < 6 ? COLORS[i] : `color-mix(in srgb, var(--primary) ${70 - i * 4}%, var(--nested))` }}
-            />
+            >
+              {e.prob / band.total > 0.045 && (
+                <div className="absolute inset-x-2 bottom-2 text-white sm:inset-x-3 sm:bottom-3" aria-hidden="true">
+                  <p className="num text-[22px] leading-none tracking-[-0.04em] sm:text-[44px]">{pct(e.prob)}</p>
+                  <p className="mt-1 truncate text-[11px] sm:text-[13px]">{e.name}</p>
+                </div>
+              )}
+            </div>
           ))}
-          <div title={`${ranked.length - 12} other entries · ${pct(band.restP)}`} className="h-full bg-raised" style={{ width: `${+((band.restP / band.total) * 100).toFixed(3)}%` }} />
+          <div title={`${ranked.length - 12} other entries · ${pct(band.restP)}`} className="relative h-full bg-raised" style={{ width: `${+((band.restP / band.total) * 100).toFixed(3)}%` }} />
           {m.remainder > 0.001 && <div title={`Unassigned · ${pct(m.remainder)}`} className="stripes h-full bg-nested" style={{ width: `${+((m.remainder / band.total) * 100).toFixed(3)}%` }} />}
         </div>
         <ul className={`mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-text-2 ${blind ? "invisible" : ""}`}>
@@ -77,9 +84,9 @@ export function OpportunityBoard({ m }: { m: OppMarket }) {
         </ul>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="min-w-0 rounded-[10px] bg-card">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line p-4">
+      <div className="grid gap-10 pt-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="min-w-0 border-t border-text/85">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-text/15 py-4">
             <div role="group" aria-label="Mode" className="inline-flex rounded-full bg-nested p-1">
               <button type="button" aria-pressed={!blind} onClick={() => setBlind(false)} className={`h-8 rounded-full px-3.5 text-[12.5px] ${!blind ? "bg-card text-text shadow-sm" : "text-text-2"}`}>Market view</button>
               <button type="button" aria-pressed={blind} onClick={() => setBlind(true)} className={`h-8 rounded-full px-3.5 text-[12.5px] ${blind ? "bg-primary text-on-primary" : "text-text-2"}`}>Blind review</button>
@@ -173,7 +180,7 @@ export function OpportunityBoard({ m }: { m: OppMarket }) {
         </div>
 
         <aside className="space-y-4">
-          <div className="rounded-[10px] bg-card p-4">
+          <div className="border-t border-text/85 pt-3">
             <p className="text-[13px] font-medium">Your shortlist vs. the market</p>
             {short.size === 0 ? (
               <p className="mt-2 text-[12.5px] leading-relaxed text-text-2">Star the entries you&apos;d pick. We&apos;ll compare them with the market&apos;s top {N} — agreement is reassuring, disagreement is where to look again.</p>
@@ -194,7 +201,7 @@ export function OpportunityBoard({ m }: { m: OppMarket }) {
             )}
           </div>
           {longShots.length > 0 && (
-            <div className="rounded-[10px] bg-card p-4">
+            <div className="border-t border-text/85 pt-3">
               <p className="text-[13px] font-medium">Worth a second look</p>
               <p className="mt-1 text-[12px] text-text-2">Live contenders the market prices at 2–10% — not favourites, not dismissed.</p>
               <ul className="mt-3 space-y-1.5 text-[12.5px]">

@@ -44,12 +44,12 @@ export function RiskExplorer({ data, classes }: { data: RiskData; classes: Asset
   const anyDefault = 1 - exposure.reduce((s, e) => s * (1 - e.a.pdYearly), 1);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-14">
       {/* Ranked, one comparable scale */}
-      <section className="rounded-[10px] bg-card p-4 sm:p-5" aria-labelledby="scale-h">
+      <section className="border-t border-text/85 pt-3" aria-labelledby="scale-h">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 id="scale-h" className="text-[15px] font-medium">Default probability, every asset on one scale</h2>
+            <h2 id="scale-h" className="text-[22px] font-medium tracking-[-0.025em] sm:text-[26px]">Default probability, every asset on one scale</h2>
             <p className="mt-0.5 text-[12.5px] text-text-2">Log scale. Click an asset to compare it. Same market, same horizon for all {data.assets.length}.</p>
           </div>
           <div role="group" aria-label="Horizon" className="inline-flex rounded-full bg-nested p-1">
@@ -117,10 +117,10 @@ export function RiskExplorer({ data, classes }: { data: RiskData; classes: Asset
         </div>
       </section>
 
-      <div className="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
+      <div className="grid gap-14 lg:grid-cols-[1.3fr_1fr] lg:gap-10">
         {/* Compare */}
-        <section className="rounded-[10px] bg-card p-4 sm:p-5" aria-labelledby="cmp-h">
-          <h2 id="cmp-h" className="text-[15px] font-medium">Compare side by side</h2>
+        <section className="border-t border-text/85 pt-3" aria-labelledby="cmp-h">
+          <h2 id="cmp-h" className="text-[22px] font-medium tracking-[-0.025em] sm:text-[26px]">Compare side by side</h2>
           <p className="mt-0.5 text-[12.5px] text-text-2">{picked.length ? "Up to four. Click names in the scale above to swap." : "Pick up to four assets in the scale above."}</p>
           <ul className="mt-4 grid gap-2 sm:grid-cols-2">
             {picked.map((a) => (
@@ -148,8 +148,8 @@ export function RiskExplorer({ data, classes }: { data: RiskData; classes: Asset
         </section>
 
         {/* Exposure */}
-        <section className="rounded-[10px] bg-card p-4 sm:p-5" aria-labelledby="exp-h">
-          <h2 id="exp-h" className="text-[15px] font-medium">Your exposure</h2>
+        <section className="border-t border-text/85 pt-3" aria-labelledby="exp-h">
+          <h2 id="exp-h" className="text-[22px] font-medium tracking-[-0.025em] sm:text-[26px]">Your exposure</h2>
           <p className="mt-0.5 text-[12.5px] text-text-2">Enter what you hold in each compared asset.</p>
           <div className="mt-4 space-y-2">
             {exposure.map(({ a, el: e }) => (

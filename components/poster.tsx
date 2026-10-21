@@ -43,7 +43,7 @@ export function StatRow({ items }: { items: { k: string; v: React.ReactNode; s?:
       {items.map((it, i) => (
         <div key={it.k} className={`min-w-0 py-4 pr-4 ${i % 2 ? "pl-4 md:pl-6" : "md:pl-6"} ${i ? "border-l border-text/15" : "md:pl-0"} ${i === 2 ? "max-md:border-l-0 max-md:pl-0" : ""} ${i >= 2 ? "max-md:border-t max-md:border-text/15" : ""}`}>
           <dt className="num text-[10.5px] uppercase tracking-[0.12em] text-text-2">{it.k}</dt>
-          <dd className={`num mt-2 truncate text-[30px] leading-none tracking-[-0.03em] sm:text-[40px] ${it.accent ? "text-signal" : ""}`}>{it.v}</dd>
+          <dd className={`num mt-2 truncate leading-none tracking-[-0.03em] ${typeof it.v === "string" && it.v.length > 9 ? "text-[20px] sm:text-[26px]" : "text-[30px] sm:text-[40px]"} ${it.accent ? "text-signal" : ""}`}>{it.v}</dd>
           {it.s && <dd className="mt-1.5 truncate text-[12px] text-text-2">{it.s}</dd>}
         </div>
       ))}

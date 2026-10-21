@@ -30,7 +30,7 @@ export default async function MarketPage({ params }: P) {
   const outs = visibleOutcomes(m);
 
   return (
-    <div className="mx-auto max-w-[1320px] px-4 pt-6 sm:px-6 sm:pt-10">
+    <div className="mx-auto max-w-[1440px] px-4 pt-6 sm:px-8 sm:pt-10">
       <nav aria-label="Breadcrumb" className="num flex flex-wrap items-center gap-1.5 text-[12px] text-muted">
         <Link href="/app" className="hover:text-text">Markets</Link>
         <span aria-hidden="true">/</span>

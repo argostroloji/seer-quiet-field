@@ -4,7 +4,8 @@ import { searchMarkets, type SearchParams } from "@/lib/seer/api";
 import { CHAINS, KIND_LABEL, fmtPct, fmtUSD, visibleOutcomes } from "@/lib/seer/normalize";
 import type { Market } from "@/lib/seer/types";
 import { MarketCard, marketHref, ChainBadge, StatusDot, Thumb, MarketRowMeta } from "@/components/market-card";
-import { Empty, ErrorNote, Kicker, ProvenanceChip } from "@/components/ui";
+import { Empty, ErrorNote } from "@/components/ui";
+import { MetaRule, PosterTitle } from "@/components/poster";
 
 export const metadata: Metadata = { title: "Seer app — every market", description: "Search, filter and inspect every Seer market across chains." };
 
@@ -80,17 +81,13 @@ export default async function AppPage({ searchParams }: { searchParams: Promise<
   };
 
   return (
-    <div className="mx-auto max-w-[1320px] px-4 pt-8 sm:px-6 sm:pt-12">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <Kicker>02 · Seer app</Kicker>
-          <h1 className="mt-2 text-[32px] font-medium leading-[1.02] tracking-[-0.03em] sm:text-[44px]">Find any market. See everything about it.</h1>
-        </div>
-        <ProvenanceChip p={res} />
-      </div>
+    <>
+    <MetaRule index="02" app="Seer app" items={["Explorer · every market type", `${total.toLocaleString("en-US")} results`]} p={res} />
+    <div className="mx-auto max-w-[1440px] px-4 pt-8 sm:px-8 sm:pt-12">
+      <PosterTitle className="max-w-[13ch]">Every market, on the record.</PosterTitle>
 
       {/* Search — kit pill search, accepts question text, market address or creator address */}
-      <form action="/app" method="get" role="search" className="mt-6">
+      <form action="/app" method="get" role="search" className="mt-10">
         {status !== "trading" && <input type="hidden" name="status" value={status} />}
         {chain && <input type="hidden" name="chain" value={chain} />}
         {cat && <input type="hidden" name="cat" value={cat} />}
@@ -98,15 +95,16 @@ export default async function AppPage({ searchParams }: { searchParams: Promise<
         {sort !== "liquidityUSD" && <input type="hidden" name="sort" value={sort} />}
         {view === "table" && <input type="hidden" name="view" value="table" />}
         <label htmlFor="q" className="sr-only">Search markets</label>
-        <div className="flex h-12 items-center gap-2 rounded-full bg-card pl-4 pr-1.5 ring-1 ring-line focus-within:ring-2 focus-within:ring-[var(--focus)]">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="shrink-0 text-muted" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="q" name="q" defaultValue={q} placeholder="Search by question, market address or creator 0x…" className="min-w-0 flex-1 bg-transparent text-[14.5px] outline-none placeholder:text-muted" autoComplete="off" />
-          <button className="h-9 rounded-full bg-primary px-4 text-[13px] font-medium text-on-primary hover:bg-primary-hover">Search</button>
+        <div className="flex h-16 items-center gap-3 rounded-full bg-card pl-6 pr-2 ring-1 ring-text/85 focus-within:ring-2 focus-within:ring-[var(--focus)] sm:h-20 sm:pl-8">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="shrink-0 text-text" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" name="q" defaultValue={q} placeholder="A question, a market 0x… or a creator 0x…" className="min-w-0 flex-1 bg-transparent text-[18px] tracking-[-0.01em] outline-none placeholder:text-muted sm:text-[24px]" autoComplete="off" />
+          <button className="h-12 rounded-full bg-primary px-5 text-[14px] font-medium text-on-primary hover:bg-primary-hover sm:h-14 sm:px-7">Search</button>
         </div>
+        <p className="num mt-2 pl-6 text-[11px] uppercase tracking-[0.14em] text-text-2 sm:pl-8">Like a block explorer: paste any address to find its market or everything its creator made.</p>
       </form>
 
       {/* Filters */}
-      <div className="mt-4 space-y-2">
+      <div className="mt-8 space-y-2 border-t border-text/85 pt-4">
         <FilterRow label="Status">
           {[["trading", "Open"], ["answering", "Answer pending"], ["dispute", "In dispute"], ["resolved", "Resolved"], ["all", "All"]].map(([k, l]) => (
             <FLink key={k} href={href({ status: k, page: null })} active={status === k}>{l}</FLink>
@@ -169,6 +167,7 @@ export default async function AppPage({ searchParams }: { searchParams: Promise<
         </nav>
       )}
     </div>
+    </>
   );
 }
 
