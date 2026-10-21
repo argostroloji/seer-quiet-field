@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { getStats, searchMarkets } from "@/lib/seer/api";
+import { getStats } from "@/lib/seer/api";
+import { getJobBoard } from "@/lib/seer/opportunity";
 import { getDeepRound } from "@/lib/seer/deep";
 import { getProposalPrices } from "@/lib/seer/futarchy";
 import { getRisk } from "@/lib/seer/risk";
 import { IDS } from "@/lib/seer/config";
-import { fmtPct, fmtUSD, visibleOutcomes } from "@/lib/seer/normalize";
+import { fmtPct, fmtUSD } from "@/lib/seer/normalize";
 import { ProvenanceChip, type Provenance } from "@/components/ui";
 import type { Sourced } from "@/lib/seer/types";
 
@@ -32,14 +33,13 @@ export async function LiveStrip() {
     getDeepRound(),
     getProposalPrices(IDS.futarchyLive.id, IDS.futarchyLive.chainId, 4),
     getRisk(),
-    searchMarkets({ marketIds: [IDS.jobBoard[0].id], chainsList: ["100"], limit: 1 }),
+    getJobBoard(),
   ]);
   const leader = deep.data.repos[0];
   const f = fut.data;
   const gap = f?.pass != null && f?.fail != null ? ((f.pass - f.fail) / f.fail) * 100 : null;
   const riskTop = [...risk.data.assets].sort((a, b) => b.pdYearly - a.pdYearly)[0];
-  const om = opp.data.markets[0];
-  const oTop = om ? visibleOutcomes(om)[0] : undefined;
+  const oTop = opp.data.entries[0];
 
   return (
     <ul className="grid gap-px overflow-hidden rounded-[10px] bg-line grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
@@ -47,7 +47,7 @@ export async function LiveStrip() {
       <Tile app="Volume" href="/app?sort=volumeUSD" value={fmtUSD(stats.data.volumeUSD)} label="traded across the 1,000 largest markets" sub={`${fmtUSD(stats.data.liquidityUSD)} liquidity`} p={prov(stats)} />
       <Tile app="Deep" href="/deep" value={leader ? fmtPct(leader.score, 0) : "—"} label={leader ? `top originality forecast: ${leader.repo}` : "Deep Funding round"} sub={`${deep.data.repos.length} repos in the field`} p={prov(deep)} />
       <Tile app="Futarchy" href="/futarchy" value={gap == null ? "—" : `${gap >= 0 ? "+" : ""}${gap.toFixed(3)}%`} label="ETH price if EIP-8363 passes vs. if it fails" sub={f?.pass ? `${f.pass.toFixed(2)} vs ${f.fail?.toFixed(2)} ${f.currency}` : undefined} p={prov(fut)} />
-      <Tile app="Opportunity" href="/opportunity" value={oTop ? fmtPct(oTop.prob, 0) : "—"} label={oTop ? `“${oTop.name}” leads the AI job-board name market` : "Opportunity markets"} sub={om ? `${visibleOutcomes(om).length} names in play` : undefined} p={prov(opp)} />
+      <Tile app="Opportunity" href="/opportunity" value={oTop ? fmtPct(oTop.prob, 0) : "—"} label={oTop ? `“${oTop.name}” leads the AI job-board name market` : "Opportunity markets"} sub={`${opp.data.entries.length} names in play`} p={prov(opp)} />
       <Tile app="Risk Pricing" href="/risk" value={riskTop ? fmtPct(riskTop.pdYearly) : "—"} label={riskTop ? `highest 1-yr default odds: ${riskTop.name}` : "Risk Pricing"} sub={`${risk.data.assets.length} assets · ${risk.data.quarter}`} p={prov(risk)} />
     </ul>
   );
