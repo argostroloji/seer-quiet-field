@@ -5,7 +5,7 @@
    Lines marked [dep N] are documented departures (app/about).
    ------------------------------------------------------------------ */
 :root,
-:root[data-theme="dark"] {
+[data-theme="dark"] {
   color-scheme: dark;
   --page: #101013;
   --card: #1a1a1e;
@@ -43,7 +43,7 @@
   --focus: #b48bff;
 }
 
-:root[data-theme="light"] {
+[data-theme="light"] {
   color-scheme: light;
   --page: #f7f7f9;
   --card: #ffffff;
