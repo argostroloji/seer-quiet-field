@@ -1,0 +1,9 @@
+node_modules
+.next
+out
+.vercel
+.env*
+qa/*.png
+!qa/.gitkeep
+tsconfig.tsbuildinfo
+next-env.d.ts

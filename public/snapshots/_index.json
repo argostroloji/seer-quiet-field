@@ -1,0 +1,120 @@
+{
+ "fetchedAt": "2026-10-21",
+ "files": [
+  {
+   "file": "seer-markets-search-open-by-liquidity.json",
+   "source": "POST https://app.seer.pm/.netlify/functions/markets-search {\"marketStatusList\":[\"open\"],\"orderBy\":\"liquidityUSD\",\"orderDirection\":\"desc\",\"limit\":40}",
+   "bytes": 162262
+  },
+  {
+   "file": "seer-market-detail-rebrand.json",
+   "source": "POST https://app.seer.pm/.netlify/functions/get-market {\"chainId\":100,\"id\":\"0xe7850b0d928aa40ab8732BD323Fa4F6Ef3c24B8a\"}",
+   "bytes": 5434
+  },
+  {
+   "file": "seer-market-chart-rebrand.json",
+   "source": "GET https://app.seer.pm/.netlify/functions/market-chart?marketId=0xe7850b0d928aa40ab8732bd323fa4f6ef3c24b8a&chainId=100  (TRUNCATED: last 60 points per outcome; full ~4.5MB)",
+   "bytes": 357397
+  },
+  {
+   "file": "seer-envio-graphql.json",
+   "source": "POST https://indexer.hyperindex.xyz/798eb82/v1/graphql { MarketsCount, Market(limit:2), chain_metadata }",
+   "bytes": 2117
+  },
+  {
+   "file": "seer-aggregate-stats.json",
+   "source": "DERIVED (not a raw endpoint) from markets-search + Envio MarketsCount",
+   "bytes": 526
+  },
+  {
+   "file": "deep-originality-r3.json",
+   "source": "GET https://deep.seer.pm/.netlify/functions/get-originality-r3-v3-markets-data",
+   "bytes": 119142
+  },
+  {
+   "file": "deep-l1-markets.json",
+   "source": "GET https://deep.seer.pm/.netlify/functions/get-l1-markets-data",
+   "bytes": 69897
+  },
+  {
+   "file": "deep-ai-markets.json",
+   "source": "GET https://deep.seer.pm/.netlify/functions/get-markets-data",
+   "bytes": 21025
+  },
+  {
+   "file": "deep-octant-markets.json",
+   "source": "GET https://deep.seer.pm/.netlify/functions/get-octant-markets-data",
+   "bytes": 13270
+  },
+  {
+   "file": "deep-leaderboard.json",
+   "source": "GET https://deep.seer.pm/.netlify/functions/get-leaderboard",
+   "bytes": 5470
+  },
+  {
+   "file": "deep-market-charts.json",
+   "source": "GET https://deep.seer.pm/.netlify/functions/get-market-charts?ids=0x5D6A571b0f663C33831E6f81DD3C3f554eca188B",
+   "bytes": 4156
+  },
+  {
+   "file": "deep-market-detail-l1.json",
+   "source": "POST https://app.seer.pm/.netlify/functions/get-market {\"chainId\":10,\"id\":\"0x3220a208aaf4d2ceecde5a2e21ec0c9145f40ba6\"}",
+   "bytes": 59149
+  },
+  {
+   "file": "deep-markets-search-r3-children.json",
+   "source": "POST https://app.seer.pm/.netlify/functions/markets-search {\"parentMarket\":\"0x37ab5cbeee3a32289430e5d38b914ec7f580fd87\",\"chainsList\":[\"10\"],\"limit\":5}",
+   "bytes": 17584
+  },
+  {
+   "file": "futarchy-registry.json",
+   "source": "POST https://api.futarchy.seer.pm/registry/graphql aggregator(0xc5eb43…) organizations+proposals",
+   "bytes": 33957
+  },
+  {
+   "file": "futarchy-candles-gip153.json",
+   "source": "POST https://api.futarchy.seer.pm/candles/graphql proposal(0x4120de99…) pools+candles",
+   "bytes": 2667
+  },
+  {
+   "file": "futarchy-candles-eip8363.json",
+   "source": "POST https://api.futarchy.seer.pm/candles/graphql?chainId=1 proposal(0x0d78b95f…) pools+48h candles",
+   "bytes": 26063
+  },
+  {
+   "file": "futarchy-chart-gip153.json",
+   "source": "GET https://api.futarchy.fi/api/v2/proposals/0x4120de9931fd29c8a6effea4df57a7c8760c1677/chart?minTimestamp=1790000000",
+   "bytes": 11267
+  },
+  {
+   "file": "futarchy-prices-gip153.json",
+   "source": "GET https://api.futarchy.seer.pm/api/v1/market-events/proposals/0x4120de9931fd29c8a6effea4df57a7c8760c1677/prices",
+   "bytes": 895
+  },
+  {
+   "file": "futarchy-seer-market-gip153.json",
+   "source": "POST https://app.seer.pm/.netlify/functions/get-market {\"chainId\":100,\"id\":\"0x4120de99…\"}",
+   "bytes": 2554
+  },
+  {
+   "file": "opportunity-markets.json",
+   "source": "POST https://app.seer.pm/.netlify/functions/markets-search {\"chainsList\":[\"100\"],\"marketIds\":[5 opportunity ids]}",
+   "bytes": 59649
+  },
+  {
+   "file": "risk-pricing.json",
+   "source": "GET https://risk.seer.pm/api/v1/risk-pricing",
+   "bytes": 7032
+  },
+  {
+   "file": "risk-pricing-markets.json",
+   "source": "GET https://risk.seer.pm/api/v1/risk-pricing/markets",
+   "bytes": 158
+  },
+  {
+   "file": "risk-pricing-history.json",
+   "source": "GET https://risk.seer.pm/api/v1/risk-pricing/history",
+   "bytes": 224875
+  }
+ ]
+}

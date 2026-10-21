@@ -1,0 +1,187 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   EF tokens — values read from the Seer Branding Figma (see research/ef-kit.md).
+   Lines marked [dep N] are documented departures (app/about).
+   ------------------------------------------------------------------ */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #101013;
+  --card: #1a1a1e;
+  --nested: #1f1f24;
+  --raised: #26262c;            /* [dep 4] hover step the kit lacks */
+  --line: #2a2a31;              /* [dep 4] hairline divider */
+  --text: #ededf2;
+  --text-2: #a8a8b3;
+  --muted: #8a8a94;             /* [dep 2] kit #67676F lifted for AA text */
+  --muted-line: #67676f;        /* kit muted, kept for strokes */
+  --primary: #7c33ff;
+  --primary-hover: #8b4bff;
+  --on-primary: #ffffff;
+  --secondary: #241e33;
+  --secondary-text: #9c6ff2;
+  --ink: #141123;               /* Brandbook deep ink */
+  --signal: #9c6ff2;            /* violet as text on dark */
+  /* [dep 3] semantic + data colours */
+  --up: #3ecf8e;
+  --down: #f2617a;
+  --warn: #f2b84b;
+  --live: #ff4d4d;
+  --risk-1: #3a3350;
+  --risk-2: #5b3fa8;
+  --risk-3: #7c33ff;
+  --risk-4: #c04fd8;
+  --risk-5: #f2617a;
+  --cat-1: #9c6ff2;
+  --cat-2: #4fb3d9;
+  --cat-3: #e8a33d;
+  --cat-4: #3ecf8e;
+  --cat-5: #f2617a;
+  --cat-6: #c8c8d4;
+  --glow: rgba(124, 51, 255, 0.35);
+  --focus: #b48bff;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page: #f7f7f9;
+  --card: #ffffff;
+  --nested: #f1f1f4;
+  --raised: #e9e9ee;
+  --line: #e4e4ea;
+  --text: #17171c;
+  --text-2: #5c5c66;
+  --muted: #6b6b76;             /* [dep 2] kit #8E8E99 lifted for AA text */
+  --muted-line: #8e8e99;
+  --primary: #7c33ff;
+  --primary-hover: #6c2bd9;
+  --on-primary: #ffffff;
+  --secondary: #efe9fc;
+  --secondary-text: #6c2bd9;
+  --ink: #141123;
+  --signal: #6c2bd9;
+  --up: #12875a;
+  --down: #c8324d;
+  --warn: #a8690a;
+  --live: #d92b2b;
+  --risk-1: #e6e0f5;
+  --risk-2: #b79cf0;
+  --risk-3: #7c33ff;
+  --risk-4: #a12fbf;
+  --risk-5: #c8324d;
+  --cat-1: #6c2bd9;
+  --cat-2: #1f7fa8;
+  --cat-3: #b0700a;
+  --cat-4: #12875a;
+  --cat-5: #c8324d;
+  --cat-6: #5c5c66;
+  --glow: rgba(124, 51, 255, 0.18);
+  --focus: #6c2bd9;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-card: var(--card);
+  --color-nested: var(--nested);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-muted: var(--muted);
+  --color-muted-line: var(--muted-line);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-secondary: var(--secondary);
+  --color-secondary-text: var(--secondary-text);
+  --color-signal: var(--signal);
+  --color-ink: var(--ink);
+  --color-up: var(--up);
+  --color-down: var(--down);
+  --color-warn: var(--warn);
+  --color-live: var(--live);
+  --font-sans: var(--font-sans-face), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, monospace;
+  --radius-card: 10px;
+  --radius-row: 6px;
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+html {
+  background: var(--page);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body {
+  background: var(--page);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  min-height: 100dvh;
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* EF 45° stripe motif — used for risk bands, voided branches, "illustrative" overlays */
+.stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--text) 9%, transparent) 0 1px,
+    transparent 1px 7px
+  );
+}
+.stripes-violet {
+  background-image: repeating-linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--primary) 45%, transparent) 0 1.5px,
+    transparent 1.5px 6px
+  );
+}
+/* dot-matrix field (Brandbook app-icon panel) */
+.dots {
+  background-image: radial-gradient(color-mix(in srgb, var(--text) 14%, transparent) 1px, transparent 1.2px);
+  background-size: 14px 14px;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--nested) 0%, var(--raised) 50%, var(--nested) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 6px;
+}
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.rise { animation: rise 0.5s var(--ease-out-soft) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
