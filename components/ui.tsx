@@ -40,7 +40,7 @@ export function ProvenanceChip({ p, className = "", compact = false }: { p: Prov
       )}
       {compact && <span className="sr-only">{p.source}</span>}
       <span className="num shrink-0 text-muted">
-        <Ago iso={p.fetchedAt} />
+        {live ? <Ago iso={p.fetchedAt} /> : <time dateTime={p.fetchedAt}>as of {p.fetchedAt.slice(0, 10)}</time>}
       </span>
     </span>
   );

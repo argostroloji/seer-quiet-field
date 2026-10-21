@@ -4,7 +4,7 @@ import { normalizeMarket } from "./normalize";
 import type { ChainId, Market, PricePoint, SeerMarketRaw, Sourced } from "./types";
 
 const SEER = "https://app.seer.pm/.netlify/functions";
-export const SNAPSHOT_DATE = "2026-10-21T08:14:00Z";
+export const SNAPSHOT_DATE = "2026-10-21T05:20:00Z";
 /** QA switch: SEER_FORCE_SNAPSHOT=1 makes every live call fail so fallbacks can be checked. */
 const FORCE_SNAPSHOT = process.env.SEER_FORCE_SNAPSHOT === "1";
 
@@ -206,11 +206,7 @@ export interface SeerStats {
 
 const ENVIO = "https://indexer.hyperindex.xyz/798eb82/v1/graphql";
 
-export async function getStats(): Promise<Sourced<SeerStats>> {
-  return sourced(
-    "Seer indexer (Envio) + markets-search",
-    "https://app.seer.pm/markets",
-    async () => {
+const liveStats = unstable_cache(async (): Promise<SeerStats> => {
       const [counts, top, open] = await Promise.all([
         fetchJSON<{ data: { MarketsCount: { id: string; count: string }[] } }>(ENVIO, {
           method: "POST",
@@ -247,7 +243,13 @@ export async function getStats(): Promise<Sourced<SeerStats>> {
         liquidityUSD: top.markets.reduce((a, m) => a + (m.liquidityUSD || 0), 0),
         volumeUSD: top.markets.reduce((a, m) => a + (m.volumeUSD || 0), 0),
       };
-    },
+    }, ["seer-stats-v1"], { revalidate: 600 });
+
+export async function getStats(): Promise<Sourced<SeerStats>> {
+  return sourced(
+    "Seer indexer (Envio) + markets-search",
+    "https://app.seer.pm/markets",
+    liveStats,
     async () => {
       const s = (await import("@/public/snapshots/seer-aggregate-stats.json")).default as unknown as Record<string, unknown>;
       return {
