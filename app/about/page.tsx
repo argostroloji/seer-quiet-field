@@ -6,12 +6,12 @@ import { Kicker } from "@/components/ui";
 export const metadata: Metadata = { title: "About this design", description: "Design rationale, departures from the Electric Foundation kit, and data sources." };
 
 const MAPPING = [
-  { app: "Homepage", motif: "Converging lines", how: "Many lines meet at one point and leave as a single violet signal: opinions becoming a price. The protocol stack is drawn as the Brandbook describes Seer, a base layer with systems on top." },
-  { app: "Seer app", motif: "Kit market card", how: "The kit card, made type-aware: binary shows Yes/No with the chance, categorical shows ranked rows, scalar shows a range with the implied value. A dense table view and an Etherscan-style detail page sit on the same grammar." },
-  { app: "Deep", motif: "Dot matrix", how: "The Brandbook's dot field is the data. Every dot is one of the round's repos, stacked by forecast originality, and the review threshold shades the field." },
-  { app: "Futarchy", motif: "45° fork", how: "One trunk splits into two futures. Pass is solid violet and fail is dashed, both on one shared scale with the proposal's own ±1% decision band." },
-  { app: "Opportunity", motif: "One signal, quiet field", how: "A single 100% band. The top entries get colour, the long tail stays neutral, and unassigned probability is striped." },
-  { app: "Risk Pricing", motif: "45° stripes", how: "The stripe density encodes the risk band (under 0.1%, 0.1–1%, 1–5%, over 5%) behind every asset on one log scale." },
+  { app: "Homepage", motif: "Converging lines", how: "The poster is drawn from data. Each of the 40 lines is a live Seer market, its weight is liquidity, and all of them resolve through the Seer mark into one violet signal that cycles through real prices." },
+  { app: "Seer app", motif: "Pill search, kit cards", how: "A block-explorer search at poster scale, which takes a question, a market address or a creator address. Below it are the kit market cards, made type-aware (binary, categorical, scalar), plus a dense table and an Etherscan-style detail page." },
+  { app: "Deep", motif: "Dot matrix", how: "The Brandbook dot field is the data. There is one dot per Deep Funding repo, stacked by forecast originality, and the review threshold shades the field." },
+  { app: "Futarchy", motif: "45° fork", how: "The trunk is the proposal's real hourly conditional price. At “now” it forks into pass (violet, solid) and fail (ink, dashed), with both prices set at poster size, and is read against the proposal's own ±1% decision band." },
+  { app: "Opportunity", motif: "One signal, quiet field", how: "100% of the selection probability is shown as one band the width of the page. The leaders carry colour and type, the long tail stays neutral, and unassigned probability is striped." },
+  { app: "Risk Pricing", motif: "45° stripes", how: "Stripe density encodes the risk band behind all 33 assets on one log scale, grouped by asset class." },
 ];
 
 const DEPARTURES = [
@@ -24,7 +24,8 @@ const DEPARTURES = [
   ["New components", "The kit doesn't cover these, so we designed them in its grammar: the ecosystem bar, the data-provenance chip, the shared-scale futarchy fork, the blind-review table, the Deep field plot, the risk scale, the agent view and the resolution timeline."],
   ["Density", "Explorer and comparison views use the kit's card and row radii (10 and 6 px) at tighter spacing, with optional tables, because comparison needs aligned columns."],
   ["Mark", "The hexagonal S is redrawn from the Brandbook's 45° construction for this prototype. It's not the production vector."],
-  ["Navigation", "The kit's single-site top bar becomes one ecosystem bar. It looks the same on all six surfaces and shows which app you're in."],
+  ["Navigation", "The kit's single-site top bar becomes one ecosystem bar: an index (01–06) shared by all six surfaces, with a violet rule under the app you're in."],
+  ["Editorial layout", "Panels are set off with ink rules on a 12-column grid instead of nested cards. Market cards, buttons, chips and tickets stay exactly as the kit draws them."],
 ];
 
 const SOURCES = [
@@ -46,8 +47,7 @@ export default function AboutPage() {
       <Kicker>About this design</Kicker>
       <h1 className="mt-3 text-[40px] font-medium leading-[1] tracking-[-0.035em] sm:text-[64px]">{SUBMISSION.name}</h1>
       <p className="mt-6 max-w-[64ch] text-[17px] leading-relaxed text-text-2">
-        The Electric Foundation brandbook asks for <span className="text-text">&ldquo;one clear signal against a quiet, neutral field.&rdquo;</span> We took that literally. Every page is a neutral field of real Seer data, and in each one violet marks the single thing that page exists to answer. It's the same base layer six times over, each time with a different question. Nothing is mocked where Seer has real data, every panel says where its numbers came from and how fresh they are, and where markets inform human decisions the page says so.
-      </p>
+        The Electric Foundation brandbook sets its palette apart from <span className="text-text">&ldquo;trading-platform aesthetics&rdquo;</span>, pointing instead to <span className="text-text">&ldquo;the calm authority of Swiss modernism&rdquo;</span> and <span className="text-text">&ldquo;one clear signal against a quiet, neutral field.&rdquo;</span> We took both literally. The six apps are set as editorial posters on the kit&apos;s light surfaces (the dark theme is one click away): a strict 12-column grid, hairline rules, very large type and mono numerals, with violet used once per screen for the thing that page answers. The EF motifs aren&apos;t decoration. Each one is drawn from live Seer data. Every panel says where its numbers came from, and where markets inform human decisions, the page says so.</p>
 
       <section className="mt-16" aria-labelledby="map-h">
         <h2 id="map-h" className="text-[24px] font-medium tracking-[-0.02em]">How the EF kit maps to each app</h2>

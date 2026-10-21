@@ -16,7 +16,7 @@ export function EcosystemBar() {
   const navRef = useRef<HTMLUListElement>(null);
   // on phones the app list scrolls sideways: keep the current app in view
   useEffect(() => {
-    const el = navRef.current?.querySelector<HTMLElement>('[aria-current="page"]');
+    const el = navRef.current?.querySelector<HTMLElement>('[aria-current="page"]')?.closest("li") as HTMLElement | null;
     const ul = navRef.current;
     if (el && ul && ul.scrollWidth > ul.clientWidth) ul.scrollTo({ left: el.offsetLeft - ul.clientWidth / 2 + el.offsetWidth / 2 });
   }, [path]);
