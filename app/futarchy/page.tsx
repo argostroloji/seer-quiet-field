@@ -3,9 +3,10 @@ import Link from "next/link";
 import { getProposalPrices, getProposals, type ProposalMeta, type ProposalPrices } from "@/lib/seer/futarchy";
 import { IDS } from "@/lib/seer/config";
 import { fmtDate, fmtRelative, fmtUSD } from "@/lib/seer/normalize";
-import { Kicker, Panel, ProvenanceChip, ErrorNote } from "@/components/ui";
+import { Panel, ProvenanceChip, ErrorNote } from "@/components/ui";
 import { MarketChart } from "@/components/market-chart";
-import { ForkLines } from "@/components/motifs";
+import { FutarchyPoster } from "@/components/futarchy/poster";
+import { Lede, MetaRule, PosterTitle } from "@/components/poster";
 import type { Sourced } from "@/lib/seer/types";
 
 export const metadata: Metadata = { title: "Futarchy — conditional markets", description: "If this passes vs. if it doesn't: what does the market expect for the metric?" };
@@ -26,41 +27,39 @@ export default async function FutarchyPage({ searchParams }: { searchParams: Pro
   const others = list.slice(0, 14).map((p, i) => ({ meta: p, prices: rest[i] }));
 
   return (
-    <div className="mx-auto max-w-[1320px] px-4 pt-8 sm:px-6 sm:pt-12">
-      <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end">
-        <div>
-          <Kicker>04 · Futarchy</Kicker>
-          <h1 className="mt-2 text-[32px] font-medium leading-[1.02] tracking-[-0.03em] sm:text-[48px]">If it passes vs. if it doesn&apos;t.</h1>
-          <p className="mt-4 max-w-[58ch] text-[15px] leading-relaxed text-text-2">
-            Two conditional markets price the same success metric in two possible futures. When the vote is decided, trades in the future that didn&apos;t happen are reverted.
-          </p>
-        </div>
-        <ForkLines className="hidden h-auto w-full text-text lg:block" />
+    <>
+      <MetaRule index="04" app="Futarchy" items={["Conditional markets", `${featured.org} · ${featured.event || featured.question}`]} p={main} />
+      <div className="mx-auto max-w-[1440px] px-4 pt-8 sm:px-8 sm:pt-12">
+        <PosterTitle>
+          If it passes.<br />
+          <span className="text-text-2">If it doesn&apos;t.</span>
+        </PosterTitle>
+        <Lede
+          aside={
+            <>
+              <p className="font-medium">The market informs the DAO. The DAO decides.</p>
+              <p className="mt-1 text-text-2">The gap is a forecast of the metric under each outcome, not proof the proposal causes it.</p>
+            </>
+          }
+        >
+          Two conditional markets price the same success metric in two possible futures. When the vote is decided, trades in the future that didn&apos;t happen are reverted.
+        </Lede>
+
+        <Featured meta={featured} prices={main} />
+
+        <section aria-labelledby="all-h" className="mt-20">
+          <div className="flex flex-wrap items-end justify-between gap-3 border-b border-text/85 pb-3">
+            <h2 id="all-h" className="text-[28px] font-medium tracking-[-0.03em] sm:text-[40px]">Every proposal in the registry</h2>
+            <ProvenanceChip p={reg} />
+          </div>
+          <ul className="grid md:grid-cols-2 md:gap-x-10">
+            {others.map(({ meta, prices }) => (
+              <li key={meta.id} className="border-b border-text/15"><ProposalRow meta={meta} prices={prices} active={meta.id === featured.id} /></li>
+            ))}
+          </ul>
+        </section>
       </div>
-
-      <Featured meta={featured} prices={main} />
-
-      <section aria-labelledby="all-h" className="mt-12">
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-          <h2 id="all-h" className="text-[22px] font-medium tracking-[-0.02em]">Every proposal in the futarchy registry</h2>
-          <ProvenanceChip p={reg} />
-        </div>
-        <ul className="grid gap-2 md:grid-cols-2">
-          {others.map(({ meta, prices }) => (
-            <li key={meta.id}><ProposalRow meta={meta} prices={prices} active={meta.id === featured.id} /></li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="mt-12 grid gap-6 rounded-[10px] bg-card p-6 sm:p-10 md:grid-cols-[auto_1fr] md:items-center md:gap-12">
-        <p className="text-[28px] font-medium leading-[1.05] tracking-[-0.025em] sm:text-[40px]">
-          The market informs the DAO.<br /><span className="text-signal">The DAO decides.</span>
-        </p>
-        <p className="max-w-[60ch] text-[14.5px] leading-relaxed text-text-2">
-          A gap between the two prices is a forecast of the metric under each outcome. It is not proof that the proposal causes the change; thin liquidity, news and the vote itself all move prices. Delegates weigh it with everything else.
-        </p>
-      </section>
-    </div>
+    </>
   );
 }
 
@@ -85,84 +84,77 @@ function Featured({ meta, prices }: { meta: ProposalMeta; prices: Sourced<Propos
   const dHi = base * (1 + half);
   const pos = (v: number) => Math.min(100, Math.max(0, ((v - dLo) / (dHi - dLo)) * 100));
 
+  const closesLabel = open ? `vote closes ${fmtRelative(meta.closeTimestamp)}` : `closed ${fmtDate(meta.closeTimestamp)}`;
+
   return (
-    <section aria-labelledby="feat-h" className="mt-8 space-y-4">
-      <div className="rounded-[10px] bg-card p-5 sm:p-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="flex min-w-0 items-start gap-3">
-            {meta.orgLogo && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={meta.orgLogo} alt="" width={40} height={40} className="h-10 w-10 shrink-0 rounded-md bg-nested object-cover" />
-            )}
-            <div className="min-w-0">
-              <p className="num text-[11px] uppercase tracking-[0.12em] text-muted">{[meta.org, meta.chainId === 1 ? "Ethereum" : "Gnosis"].filter((v, i, a) => a.indexOf(v) === i).join(" · ")} · {open ? `closes ${fmtRelative(meta.closeTimestamp)}` : `closed ${fmtDate(meta.closeTimestamp)}`}</p>
-              <h2 id="feat-h" className="mt-1 text-[20px] font-medium leading-snug tracking-[-0.015em] sm:text-[24px]">{meta.question} <span className="text-signal">{meta.event}</span></h2>
-              {p?.marketName && <p className="mt-1 text-[13px] text-text-2">{p.marketName}</p>}
-            </div>
+    <section aria-labelledby="feat-h" className="mt-16">
+      <div className="flex flex-wrap items-start justify-between gap-4 border-t border-text/85 pt-4">
+        <div className="flex min-w-0 items-start gap-3">
+          {meta.orgLogo && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={meta.orgLogo} alt="" width={44} height={44} className="h-11 w-11 shrink-0 rounded-md bg-nested object-cover" />
+          )}
+          <div className="min-w-0">
+            <p className="num text-[11px] uppercase tracking-[0.14em] text-text-2">{[meta.org, meta.chainId === 1 ? "Ethereum" : "Gnosis"].filter((v, i, a) => a.indexOf(v) === i).join(" · ")} · {closesLabel}</p>
+            <h2 id="feat-h" className="mt-1 max-w-[30ch] text-[26px] font-medium leading-[1.05] tracking-[-0.03em] sm:text-[36px]">{meta.question} <span className="text-signal">{meta.event}</span></h2>
+            {p?.marketName && <p className="mt-2 max-w-[80ch] text-[13px] text-text-2">{p.marketName}</p>}
           </div>
-          <ProvenanceChip p={prices} />
         </div>
+        <ProvenanceChip p={prices} />
+      </div>
 
-        <div className="mt-5 inline-flex flex-wrap items-center gap-2 rounded-md bg-nested px-3 py-2 text-[12.5px]">
-          <span className="num text-[10.5px] uppercase tracking-[0.12em] text-muted">Success metric</span>
-          <span className="text-text">{p ? `${p.company} price in ${p.currency}` : "Token price"}</span>
-          {meta.twapHours && <span className="text-text-2">· {meta.twapHours} h TWAP decides the recommendation</span>}
-        </div>
+      {!p || p.pass == null || p.fail == null ? (
+        <div className="mt-6"><ErrorNote>No conditional prices for this proposal yet.</ErrorNote></div>
+      ) : (
+        <>
+          <div className="mt-6">
+            <FutarchyPoster history={p.passSeries} pass={p.pass} fail={p.fail} unit={p.currency} company={p.company} closesLabel={closesLabel} />
+          </div>
 
-        {!p || p.pass == null || p.fail == null ? (
-          <div className="mt-6"><ErrorNote>No conditional prices for this proposal yet.</ErrorNote></div>
-        ) : (
-          <>
-            {/* Shared scale — both futures on one axis */}
-            <div className="mt-8">
-              <div className="grid gap-3 sm:grid-cols-2">
-                <Branch label="If it passes" value={p.pass} unit={p.currency} tone="pass" />
-                <Branch label="If it fails" value={p.fail} unit={p.currency} tone="fail" />
-              </div>
-              <div className="relative mt-8 h-20" role="img" aria-label={`Shared scale: pass ${p.pass.toFixed(2)}, fail ${p.fail.toFixed(2)} ${p.currency}`}>
-                <div className="absolute inset-x-0 top-7 h-px bg-line" />
+          <div className="grid border-b border-text/85 md:grid-cols-3">
+            <div className="py-5 md:pr-6">
+              <p className="num text-[10.5px] uppercase tracking-[0.14em] text-text-2">The gap · pass vs. fail</p>
+              <p className="num mt-2 text-[44px] leading-none tracking-[-0.04em]">{gap != null ? `${gap >= 0 ? "+" : ""}${(gap * 100).toFixed(3)}%` : "—"}</p>
+              <p className="mt-2 text-[13px] text-text-2">Expected {p.company} price if it passes vs. if it fails: a forecast, not a measured effect.</p>
+            </div>
+            <div className="border-t border-text/15 py-5 md:border-l md:border-t-0 md:px-6">
+              <p className="num text-[10.5px] uppercase tracking-[0.14em] text-text-2">{bandPct ? `The proposal's own rule · ±${band}% band` : "Shared scale"}</p>
+              <div className="relative mt-6 h-16" role="img" aria-label={`Shared scale: pass ${p.pass.toFixed(2)}, fail ${p.fail.toFixed(2)} ${p.currency}`}>
+                <div className="absolute inset-x-0 top-7 h-px bg-text/40" />
                 {bandPct && (
-                  <div className="stripes absolute top-3 h-9 rounded-sm bg-nested/60" style={{ left: `${+(pos(base * (1 - bandPct))).toFixed(3)}%`, width: `${+(pos(base * (1 + bandPct)) - pos(base * (1 - bandPct))).toFixed(3)}%` }}>
-                    
-                  </div>
+                  <div className="stripes absolute top-3 h-9 bg-nested/60" style={{ left: `${+(pos(base * (1 - bandPct))).toFixed(3)}%`, width: `${+(pos(base * (1 + bandPct)) - pos(base * (1 - bandPct))).toFixed(3)}%` }} />
                 )}
                 <Marker x={pos(p.pass)} label="pass" cls="bg-primary" />
-                <Marker x={pos(p.fail)} label="fail" cls="bg-text-2" dashed below />
-                <span className="num absolute left-0 top-12 text-[10.5px] text-muted">−{(half * 100).toFixed(1)}%</span>
-                <span className="num absolute right-0 top-12 text-[10.5px] text-muted">+{(half * 100).toFixed(1)}%</span>
-              </div>
-              {bandPct && <p className="num -mt-1 text-center text-[10.5px] text-muted"><span className="stripes mr-1.5 inline-block h-2.5 w-5 rounded-sm bg-nested align-middle" aria-hidden="true" />neutral band ±{band}%</p>}
-              <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <p className="num text-[30px] leading-none tracking-tight">{gap != null ? `${gap >= 0 ? "+" : ""}${(gap * 100).toFixed(3)}%` : "—"}</p>
-                <p className="text-[13px] text-text-2">expected {p.company} price if it passes vs. if it fails — <span className="text-text">a forecast, not a measured effect</span>.</p>
+                <Marker x={pos(p.fail)} label="fail" cls="bg-text" dashed below />
+                <span className="num absolute left-0 top-11 text-[10.5px] text-muted">−{(half * 100).toFixed(1)}%</span>
+                <span className="num absolute right-0 top-11 text-[10.5px] text-muted">+{(half * 100).toFixed(1)}%</span>
               </div>
               {bandPct && gap != null && (
                 <p className="mt-3 text-[13px] text-text-2">
-                  This proposal&apos;s own rule: {Math.abs(gap) <= bandPct ? (
-                    <span className="text-text">the gap is inside the ±{band}% band, so the futarchy recommendation is currently <b className="font-medium text-signal">neutral</b>.</span>
+                  {Math.abs(gap) <= bandPct ? (
+                    <>Inside the band: the recommendation is currently <b className="font-medium text-signal">neutral</b>.</>
                   ) : (
-                    <span className="text-text">the gap is outside the ±{band}% band, so the recommendation currently leans <b className="font-medium text-signal">{gap > 0 ? "towards passing" : "against passing"}</b>.</span>
+                    <>Outside the band: the recommendation leans <b className="font-medium text-signal">{gap > 0 ? "towards passing" : "against passing"}</b>.</>
                   )}
                 </p>
               )}
-              {thin && (
-                <p className="mt-3 inline-flex items-center gap-2 rounded-md bg-warn/10 px-3 py-1.5 text-[12.5px] text-warn">
-                  <span aria-hidden="true">▲</span> Thin market: {p.volumeUSD ? `${fmtUSD(p.volumeUSD)} traded` : "no recorded volume"} in the window shown. Small trades can move this gap.
-                </p>
-              )}
             </div>
+            <div className="border-t border-text/15 py-5 md:border-l md:border-t-0 md:pl-6">
+              <p className="num text-[10.5px] uppercase tracking-[0.14em] text-text-2">Chance it passes</p>
+              <p className="num mt-2 text-[44px] leading-none tracking-[-0.04em]">{p.passProb != null ? `${(p.passProb * 100).toFixed(0)}%` : "—"}</p>
+              {p.passProb != null && <div className="mt-3 h-1.5 bg-nested"><div className="h-full bg-primary" style={{ width: `${+(p.passProb * 100).toFixed(3)}%` }} /></div>}
+              <p className="mt-2 text-[13px] text-text-2">{p.passProb != null ? "From the proposal's prediction pool." : "No usable prediction pool for this proposal."}</p>
+            </div>
+          </div>
+          {thin && (
+            <p className="mt-4 inline-flex items-center gap-2 bg-warn/10 px-3 py-1.5 text-[12.5px] text-warn">
+              <span aria-hidden="true">▲</span> Thin market: {p.volumeUSD ? `${fmtUSD(p.volumeUSD)} traded` : "no recorded volume"} in the window shown. Small trades can move this gap.
+            </p>
+          )}
+        </>
+      )}
 
-            {p.passProb != null && (
-              <div className="mt-6 max-w-md">
-                <div className="flex justify-between text-[12.5px]"><span className="text-text-2">Chance it passes (prediction pool)</span><span className="num">{(p.passProb * 100).toFixed(0)}%</span></div>
-                <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-nested"><div className="h-full rounded-full bg-primary" style={{ width: `${+(p.passProb * 100).toFixed(3)}%` }} /></div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
+      <div className="mt-14 grid gap-14 lg:grid-cols-[1.5fr_1fr] lg:gap-10">
         <Panel title="Both futures over time" kicker={`Conditional ${p?.company ?? ""} price · hourly`}>
           {p && p.passSeries.length > 1 ? (
             <MarketChart
@@ -170,18 +162,18 @@ function Featured({ meta, prices }: { meta: ProposalMeta; prices: Sourced<Propos
               label="Pass and fail conditional prices over time"
               series={[
                 { name: "If it passes", color: "var(--primary)", points: p.passSeries },
-                { name: "If it fails", color: "var(--text-2)", points: p.failSeries, dashed: true },
+                { name: "If it fails", color: "var(--text)", points: p.failSeries, dashed: true },
               ]}
             />
           ) : (
-            <p className="dots rounded-md px-4 py-12 text-center text-[13px] text-text-2">Not enough candles yet.</p>
+            <p className="dots px-4 py-12 text-center text-[13px] text-text-2">Not enough candles yet.</p>
           )}
         </Panel>
         <Panel title="How this proposal resolves" kicker="Timeline">
           <Timeline meta={meta} />
         </Panel>
       </div>
-      {meta.twapDescription && <p className="px-1 text-[12px] leading-relaxed text-muted">{meta.twapDescription}</p>}
+      {meta.twapDescription && <p className="mt-4 max-w-[90ch] text-[12px] leading-relaxed text-text-2">{meta.twapDescription}</p>}
     </section>
   );
 }
@@ -244,8 +236,9 @@ function ProposalRow({ meta, prices, active }: { meta: ProposalMeta; prices: Sou
       href={`/futarchy?p=${meta.id}`}
       scroll={false}
       aria-current={active ? "true" : undefined}
-      className={`flex h-full items-center gap-3 rounded-[10px] p-3.5 transition-colors ${active ? "bg-secondary ring-1 ring-primary/60" : "bg-card hover:bg-nested"}`}
+      className={`relative flex h-full items-center gap-3 py-4 pl-3 transition-colors ${active ? "bg-secondary/60" : "hover:bg-nested/70"}`}
     >
+      {active && <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[3px] bg-primary" />}
       {meta.orgLogo ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={meta.orgLogo} alt="" width={32} height={32} className="h-8 w-8 shrink-0 rounded-md bg-nested object-cover" loading="lazy" />

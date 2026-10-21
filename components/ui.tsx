@@ -64,12 +64,12 @@ export function Panel({
   pad?: boolean;
 }) {
   return (
-    <section className={`rounded-[10px] bg-card ${className}`}>
+    <section className={`min-w-0 border-t border-text/85 ${className}`}>
       {(title || provenance || actions) && (
-        <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-4 sm:px-5">
+        <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 pt-3">
           <div className="min-w-0">
-            {kicker && <p className="num mb-1 text-[10.5px] uppercase tracking-[0.12em] text-muted">{kicker}</p>}
-            {title && <h2 className="text-[15px] font-medium leading-snug">{title}</h2>}
+            {kicker && <p className="num mb-2 text-[10.5px] uppercase tracking-[0.14em] text-text-2">{kicker}</p>}
+            {title && <h2 className="text-[22px] font-medium leading-tight tracking-[-0.025em] sm:text-[26px]">{title}</h2>}
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {actions}
@@ -77,7 +77,7 @@ export function Panel({
           </div>
         </header>
       )}
-      <div className={pad ? "p-4 sm:p-5" : ""}>{children}</div>
+      <div className={pad ? "pt-5" : ""}>{children}</div>
     </section>
   );
 }

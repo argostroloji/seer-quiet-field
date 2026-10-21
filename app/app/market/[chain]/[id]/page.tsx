@@ -144,21 +144,21 @@ async function ChartSection({ m }: { m: Market }) {
 function OutcomeTable({ m }: { m: Market }) {
   const outs = m.kind === "scalar" ? visibleOutcomes(m, false) : visibleOutcomes(m);
   return (
-    <div className="-mx-4 overflow-x-auto sm:-mx-5">
+    <div className="overflow-x-auto">
       <table className="w-full min-w-[560px] text-[13px]">
         <thead>
           <tr className="text-left text-[11px] uppercase tracking-[0.08em] text-muted">
-            <th scope="col" className="w-10 px-4 py-2 font-normal sm:px-5">#</th>
+            <th scope="col" className="w-10 py-2 pr-3 font-normal">#</th>
             <th scope="col" className="py-2 font-normal">Outcome</th>
             <th scope="col" className="w-[30%] py-2 font-normal">Probability</th>
             <th scope="col" className="py-2 pr-3 text-right font-normal">Price</th>
-            <th scope="col" className="px-4 py-2 font-normal sm:px-5">Token</th>
+            <th scope="col" className="py-2 pr-3 font-normal">Token</th>
           </tr>
         </thead>
         <tbody>
           {outs.map((o, i) => (
             <tr key={o.index} className="border-t border-line/70">
-              <td className="num px-4 py-2 text-muted sm:px-5">{i + 1}</td>
+              <td className="num py-2 pr-3 text-muted">{i + 1}</td>
               <td className="max-w-[260px] py-2 pr-3">
                 <span className="flex items-center gap-2">
                   {o.image && <Thumb src={o.image} alt={o.name} size={20} />}
@@ -175,7 +175,7 @@ function OutcomeTable({ m }: { m: Market }) {
                 </div>
               </td>
               <td className="num py-2 pr-3 text-right text-text-2">{fmtCents(o.price)}</td>
-              <td className="px-4 py-2 sm:px-5">{o.token ? <CopyAddr value={o.token} href={explorerAddr(m.chainId, o.token)} /> : "—"}</td>
+              <td className="py-2 pr-3">{o.token ? <CopyAddr value={o.token} href={explorerAddr(m.chainId, o.token)} /> : "—"}</td>
             </tr>
           ))}
         </tbody>

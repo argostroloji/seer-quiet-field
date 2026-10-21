@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { getDeepLeaderboard, getDeepRound, getDeepWeights, concentration } from "@/lib/seer/deep";
 import { DeepField } from "@/components/deep/field";
 import { ViewTabs, CodeBlock } from "@/components/view-tabs";
-import { Kicker, Panel, ProvenanceChip, shortAddr } from "@/components/ui";
+import { Panel, ProvenanceChip, shortAddr } from "@/components/ui";
+import { Lede, MetaRule, PosterTitle, StatRow } from "@/components/poster";
 import { fmtUSD } from "@/lib/seer/normalize";
 
 export const metadata: Metadata = { title: "Deep — many-outcome markets", description: "Where does the market's attention concentrate across a large field of outcomes?" };
@@ -34,39 +35,34 @@ export default async function DeepPage() {
   );
 
   return (
-    <div className="mx-auto max-w-[1320px] px-4 pt-8 sm:px-6 sm:pt-12">
-      <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end">
-        <div>
-          <Kicker>03 · Deep</Kicker>
-          <h1 className="mt-2 text-[32px] font-medium leading-[1.02] tracking-[-0.03em] sm:text-[48px]">Across a big field, where does the market point?</h1>
-          <p className="mt-4 max-w-[58ch] text-[15px] leading-relaxed text-text-2">
-            <span className="text-text">{round.data.name}:</span> a human jury will score {repos.length} open-source repositories on originality.
-            Traders and AI agents forecast those scores now, so the funding team knows which repos to read first.
-          </p>
-        </div>
-        <div className="rounded-[10px] border border-primary/40 bg-secondary/40 p-4 text-[13.5px] leading-relaxed">
-          <p className="font-medium text-text">The signal guides review. People evaluate.</p>
-          <p className="mt-1 text-text-2">Prices rank where to look first; the jury still reads every repo and its scores, not the market&apos;s, settle the round.</p>
-        </div>
+    <>
+    <MetaRule index="03" app="Deep" items={["Many outcomes · agent markets", `${round.data.name}`]} p={round} />
+    <div className="mx-auto max-w-[1440px] px-4 pt-8 sm:px-8 sm:pt-12">
+      <PosterTitle className="max-w-[11ch]">Where does the field point?</PosterTitle>
+      <Lede aside={<><p className="font-medium">The signal guides review. People evaluate.</p><p className="mt-1 text-text-2">Prices rank what to read first; the jury still reads every repo, and its scores, not the market&apos;s, settle the round.</p></>}>
+        <span className="text-text">{round.data.name}.</span> A human jury will score {repos.length} open-source repositories on originality. Traders and AI agents forecast those scores now, so the funding team knows which repos to read first.
+      </Lede>
+      <div className="mt-10">
+        <StatRow
+          items={[
+            { k: "Repos in the field", v: String(repos.length), s: "one UP/DOWN market each · Optimism" },
+            { k: "Highest forecast", v: leader ? pct(leader.score!) : "—", s: leader?.repo, accent: true },
+            { k: "Forecasts ≥ 75%", v: String(scored.filter((r) => r.score! >= 0.75).length), s: "likely ‘highly original’" },
+            { k: "Jury", v: "Pending", s: round.data.status === "open" ? "market trading" : round.data.status },
+          ]}
+        />
       </div>
-
-      <dl className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] bg-line md:grid-cols-4">
-        <Stat k="Repos in the field" v={String(repos.length)} s="one UP/DOWN market each · Optimism" />
-        <Stat k="Highest forecast" v={leader ? pct(leader.score!) : "—"} s={leader?.repo} />
-        <Stat k="Forecasts ≥ 75%" v={String(scored.filter((r) => r.score! >= 0.75).length)} s="likely ‘highly original’" />
-        <Stat k="Status" v={round.data.status === "open" ? "Trading" : round.data.status} s="jury scores pending" />
-      </dl>
 
       <div className="mt-8">
         <ViewTabs
           id="deep"
           human={
-            <div className="space-y-4">
+            <div className="space-y-14">
               <Panel title="The whole field" kicker="Every repo is a dot · forecast originality" provenance={round}>
                 <DeepField repos={repos} />
               </Panel>
 
-              <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+              <div className="grid gap-14 lg:grid-cols-[1.4fr_1fr] lg:gap-10">
                 <Panel title="Did the market see it coming?" kicker="Resolved round · Level 1 juror weights" provenance={weights}>
                   <p className="mb-4 max-w-[62ch] text-[13px] leading-relaxed text-text-2">
                     In the closed Level 1 round traders forecast how the jury would split funding weight across {c.n} repos. The jury has since voted, so we can check the signal.
@@ -83,27 +79,27 @@ export default async function DeepPage() {
 
               <Panel title="Most profitable forecasters" kicker="All Deep markets · by P&L" provenance={lb}>
                 <p className="mb-3 text-[12.5px] text-text-2">Wallets aren&apos;t labelled human or agent on-chain, so we don&apos;t guess. Many Deep traders run agents that upload forecasts in bulk.</p>
-                <div className="-mx-4 overflow-x-auto sm:-mx-5">
+                <div className="overflow-x-auto">
                   <table className="w-full min-w-[520px] text-[13px]">
                     <thead>
                       <tr className="text-left text-[11px] uppercase tracking-[0.08em] text-muted">
-                        <th scope="col" className="px-4 py-2 font-normal sm:px-5">#</th>
+                        <th scope="col" className="py-2 pr-3 font-normal">#</th>
                         <th scope="col" className="py-2 font-normal">Wallet</th>
                         <th scope="col" className="py-2 text-right font-normal">P&amp;L</th>
                         <th scope="col" className="py-2 text-right font-normal">ROI</th>
                         <th scope="col" className="py-2 text-right font-normal">Volume</th>
-                        <th scope="col" className="px-4 py-2 text-right font-normal sm:px-5">Markets</th>
+                        <th scope="col" className="py-2 text-right font-normal">Markets</th>
                       </tr>
                     </thead>
                     <tbody>
                       {lb.data.slice(0, 8).map((r) => (
                         <tr key={r.address} className="border-t border-line/70">
-                          <td className="num px-4 py-2 text-muted sm:px-5">{r.rank}</td>
+                          <td className="num py-2 pr-3 text-muted">{r.rank}</td>
                           <td className="py-2"><a className="num hover:text-signal hover:underline" href={`https://optimistic.etherscan.io/address/${r.address}`} target="_blank" rel="noreferrer">{shortAddr(r.address)}</a></td>
                           <td className={`num py-2 text-right ${r.pnl >= 0 ? "text-up" : "text-down"}`}>{r.pnl >= 0 ? "+" : ""}{fmtUSD(r.pnl)}</td>
                           <td className="num py-2 text-right">{pct(r.roi)}</td>
                           <td className="num py-2 text-right text-text-2">{fmtUSD(r.volume)}</td>
-                          <td className="num px-4 py-2 text-right text-text-2 sm:px-5">{r.marketCount}</td>
+                          <td className="num py-2 text-right text-text-2">{r.marketCount}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -134,6 +130,7 @@ export default async function DeepPage() {
         />
       </div>
     </div>
+    </>
   );
 }
 
@@ -171,7 +168,7 @@ function Scatter({ rows }: { rows: { repo: string; forecast: number; actual: num
       {top.map((r, i) => {
         const right = x(r.forecast) > W * 0.62;
         return (
-          <text key={r.repo} x={x(r.forecast) + (right ? -8 : 8)} y={y(r.actual) + 4 + (i - 1) * 13} textAnchor={right ? "end" : "start"} fontSize="10.5" fill="var(--text)" className="num">
+          <text key={r.repo} x={x(r.forecast) + (right ? -8 : 8)} y={y(r.actual) + 4 + (i - 1) * 17} textAnchor={right ? "end" : "start"} fontSize="10.5" fill="var(--text)" className="num">
             {r.repo.split("/")[1]}
           </text>
         );

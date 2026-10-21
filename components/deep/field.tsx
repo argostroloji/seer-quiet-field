@@ -32,7 +32,7 @@ export function DeepField({ repos }: { repos: DeepRepo[] }) {
     return m;
   }, [scored, lo]);
   const maxStack = Math.max(1, ...Array.from(bins.values()).map((v) => v.length));
-  const R = Math.max(2.4, Math.min(5.2, W / NB / 2 - 0.6));
+  const R = Math.max(2.4, Math.min(8, W / NB / 2 - 1.2));
   const STEP = R * 2 + 2.4;
   const H = Math.max(140, maxStack * STEP + 34);
   const hovered = scored.find((r) => r.repo === hover);
