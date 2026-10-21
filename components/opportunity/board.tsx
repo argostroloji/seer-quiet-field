@@ -78,7 +78,7 @@ export function OpportunityBoard({ m }: { m: OppMarket }) {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="rounded-[10px] bg-card">
+        <div className="min-w-0 rounded-[10px] bg-card">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line p-4">
             <div role="group" aria-label="Mode" className="inline-flex rounded-full bg-nested p-1">
               <button type="button" aria-pressed={!blind} onClick={() => setBlind(false)} className={`h-8 rounded-full px-3.5 text-[12.5px] ${!blind ? "bg-card text-text shadow-sm" : "text-text-2"}`}>Market view</button>

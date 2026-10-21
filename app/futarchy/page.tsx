@@ -123,7 +123,7 @@ function Featured({ meta, prices }: { meta: ProposalMeta; prices: Sourced<Propos
                 <div className="absolute inset-x-0 top-7 h-px bg-line" />
                 {bandPct && (
                   <div className="stripes absolute top-3 h-9 rounded-sm bg-nested/60" style={{ left: `${+(pos(base * (1 - bandPct))).toFixed(3)}%`, width: `${+(pos(base * (1 + bandPct)) - pos(base * (1 - bandPct))).toFixed(3)}%` }}>
-                    <span className="num absolute left-1 top-[38px] whitespace-nowrap text-[10px] text-muted">neutral band ±{band}%</span>
+                    
                   </div>
                 )}
                 <Marker x={pos(p.pass)} label="pass" cls="bg-primary" />
@@ -131,6 +131,7 @@ function Featured({ meta, prices }: { meta: ProposalMeta; prices: Sourced<Propos
                 <span className="num absolute left-0 top-12 text-[10.5px] text-muted">−{(half * 100).toFixed(1)}%</span>
                 <span className="num absolute right-0 top-12 text-[10.5px] text-muted">+{(half * 100).toFixed(1)}%</span>
               </div>
+              {bandPct && <p className="num -mt-1 text-center text-[10.5px] text-muted"><span className="stripes mr-1.5 inline-block h-2.5 w-5 rounded-sm bg-nested align-middle" aria-hidden="true" />neutral band ±{band}%</p>}
               <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <p className="num text-[30px] leading-none tracking-tight">{gap != null ? `${gap >= 0 ? "+" : ""}${(gap * 100).toFixed(3)}%` : "—"}</p>
                 <p className="text-[13px] text-text-2">expected {p.company} price if it passes vs. if it fails — <span className="text-text">a forecast, not a measured effect</span>.</p>
@@ -251,7 +252,7 @@ function ProposalRow({ meta, prices, active }: { meta: ProposalMeta; prices: Sou
       ) : <span className="h-8 w-8 shrink-0 rounded-md bg-nested" />}
       <div className="min-w-0 flex-1">
         <p className="num text-[10.5px] uppercase tracking-[0.1em] text-muted">{meta.org} · {fmtDate(meta.createdAt)}</p>
-        <p className="line-clamp-1 text-[13.5px]">{meta.question} <span className="text-text-2">{meta.event}</span></p>
+        <p className="line-clamp-2 text-[13.5px] leading-snug">{meta.event ? <>{meta.event.replace(/^if /i, "If ")} <span className="text-text-2">— {meta.question.replace(/^What will (the )?/i, "").replace(/ be$/i, "")}</span></> : meta.question}</p>
       </div>
       <div className="w-24 shrink-0 text-right">
         {gap == null ? (

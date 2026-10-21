@@ -13,6 +13,13 @@ function isActive(path: string, href: string) {
 
 export function EcosystemBar() {
   const path = usePathname() || "/";
+  const navRef = useRef<HTMLUListElement>(null);
+  // on phones the app list scrolls sideways: keep the current app in view
+  useEffect(() => {
+    const el = navRef.current?.querySelector<HTMLElement>('[aria-current="page"]');
+    const ul = navRef.current;
+    if (el && ul && ul.scrollWidth > ul.clientWidth) ul.scrollTo({ left: el.offsetLeft - ul.clientWidth / 2 + el.offsetWidth / 2 });
+  }, [path]);
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-page/85 backdrop-blur-md supports-[backdrop-filter]:bg-page/70">
       <div className="mx-auto flex h-14 max-w-[1320px] items-center gap-3 px-4 sm:px-6">
@@ -22,7 +29,7 @@ export function EcosystemBar() {
         </Link>
 
         <nav aria-label="Seer ecosystem" className="relative min-w-0 flex-1">
-          <ul className="scrollbar-none flex items-center gap-0.5 overflow-x-auto [mask-image:linear-gradient(90deg,#000_88%,transparent)] md:[mask-image:none]">
+          <ul ref={navRef} className="scrollbar-none flex items-center gap-0.5 overflow-x-auto [mask-image:linear-gradient(90deg,#000_88%,transparent)] md:[mask-image:none]">
             {APPS.map((a, i) => {
               const active = isActive(path, a.href);
               return (

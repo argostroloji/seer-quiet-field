@@ -15,3 +15,6 @@ export const APPS: {
   { key: "opportunity", href: "/opportunity", name: "Opportunity Markets", short: "Opportunity", question: "Which submissions does the market expect to be selected?", live: "https://opportunity.seer.pm" },
   { key: "risk", href: "/risk", name: "Risk Pricing", short: "Risk", question: "How risky is each protocol relative to the others?", live: "https://risk.seer.pm" },
 ];
+
+/** Submission name — single source of truth (title, /about, preview, claim). */
+export const SUBMISSION = { name: "Quiet Field", tagline: "One clear signal against a quiet, neutral field." };

@@ -2,10 +2,11 @@
 
 import { line as d3line, curveMonotoneX } from "d3-shape";
 import { useId, useMemo, useState } from "react";
+import { useWidth } from "./use-width";
 
 export type Series = { name: string; color: string; points: { t: number; p: number }[]; dashed?: boolean };
 
-const fmtT = (t: number) => new Date(t * 1000).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+const fmtT = (t: number) => new Date(t * 1000).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 
 /** Lightweight multi-series line chart. Hover or arrow keys move the crosshair; values announced via aria-live. */
 export function LineChart({
@@ -21,8 +22,8 @@ export function LineChart({
   yDomain?: [number, number];
   label: string;
 }) {
-  const W = 720;
-  const H = height;
+  const [box, W] = useWidth<HTMLElement>(720);
+  const H = W < 520 ? Math.round(height * 0.85) : height;
   const pad = { l: 8, r: 48, t: 10, b: 22 };
   const uid = useId();
   const all = series.flatMap((s) => s.points);
@@ -45,7 +46,7 @@ export function LineChart({
     const times = Array.from(new Set(all.map((p) => p.t))).sort((a, b) => a - b);
     return { x, y, ticks, times, yTicks };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [series, H, yDomain]);
+  }, [series, H, W, yDomain]);
 
   if (!all.length) return null;
 
@@ -63,7 +64,7 @@ export function LineChart({
       .curve(curveMonotoneX)(pts) ?? "";
 
   return (
-    <figure className="relative">
+    <figure className="relative" ref={box}>
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="h-auto w-full touch-pan-y select-none"

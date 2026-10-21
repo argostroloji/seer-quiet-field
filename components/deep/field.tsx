@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useWidth } from "@/components/charts/use-width";
 import type { DeepRepo } from "@/lib/seer/deep";
 
 const pct = (v: number | null) => (v == null ? "—" : `${(v * 100).toFixed(0)}%`);
@@ -9,6 +10,7 @@ const pct = (v: number | null) => (v == null ? "—" : `${(v * 100).toFixed(0)}%
 export function DeepField({ repos }: { repos: DeepRepo[] }) {
   const scored = repos.filter((r) => r.score != null) as (DeepRepo & { score: number })[];
   const [th, setTh] = useState(0.75);
+  const [box, W] = useWidth<HTMLDivElement>(1000);
   const [hover, setHover] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
   const above = scored.filter((r) => r.score >= th);
@@ -19,7 +21,7 @@ export function DeepField({ repos }: { repos: DeepRepo[] }) {
 
   // axis spans the field, not 0–100%, so the cluster gets the width; dots stack in 40 bins
   const lo = useMemo(() => Math.max(0, Math.floor((Math.min(...scored.map((r) => r.score), 1) - 0.05) * 10) / 10), [scored]);
-  const X = (v: number) => ((v - lo) / (1 - lo)) * 1000;
+  const X = (v: number) => ((v - lo) / (1 - lo)) * W;
   const NB = 40;
   const bins = useMemo(() => {
     const m = new Map<number, (DeepRepo & { score: number })[]>();
@@ -30,22 +32,24 @@ export function DeepField({ repos }: { repos: DeepRepo[] }) {
     return m;
   }, [scored, lo]);
   const maxStack = Math.max(1, ...Array.from(bins.values()).map((v) => v.length));
-  const H = Math.max(140, maxStack * 13 + 34);
+  const R = Math.max(2.4, Math.min(5.2, W / NB / 2 - 0.6));
+  const STEP = R * 2 + 2.4;
+  const H = Math.max(140, maxStack * STEP + 34);
   const hovered = scored.find((r) => r.repo === hover);
 
   return (
     <div>
-      <div className="relative">
-        <svg viewBox={`0 0 1000 ${H}`} className="h-auto w-full" role="img" aria-label={`Distribution of ${scored.length} originality forecasts; median ${pct(median)}`}>
+      <div className="relative" ref={box}>
+        <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label={`Distribution of ${scored.length} originality forecasts; median ${pct(median)}`}>
           {/* review zone */}
-          <rect x={X(th)} y={0} width={1000 - X(th)} height={H - 22} fill="var(--primary)" opacity="0.08" />
+          <rect x={X(th)} y={0} width={W - X(th)} height={H - 22} fill="var(--primary)" opacity="0.08" />
           <line x1={X(th)} x2={X(th)} y1={0} y2={H - 22} stroke="var(--primary)" strokeDasharray="3 4" />
           <line x1={X(median)} x2={X(median)} y1={0} y2={H - 22} stroke="var(--text-2)" strokeOpacity=".5" />
           <text x={X(median) - 6} y={12} fontSize="11" fill="var(--text-2)" textAnchor="end" className="num">median {pct(median)}</text>
           {Array.from(bins.entries()).map(([b, rs]) =>
             rs.map((r, i) => {
-              const cx = (b + 0.5) * (1000 / NB);
-              const cy = H - 32 - i * 13;
+              const cx = (b + 0.5) * (W / NB);
+              const cy = H - 32 - i * STEP;
               const on = r.score >= th;
               const isH = hover === r.repo;
               return (
@@ -53,7 +57,7 @@ export function DeepField({ repos }: { repos: DeepRepo[] }) {
                   key={r.repo}
                   cx={cx}
                   cy={cy}
-                  r={isH ? 7 : 5.2}
+                  r={isH ? R + 2 : R}
                   fill={on ? "var(--primary)" : "var(--muted-line)"}
                   stroke={isH ? "var(--text)" : "none"}
                   onPointerEnter={() => setHover(r.repo)}

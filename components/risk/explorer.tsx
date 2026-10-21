@@ -61,13 +61,17 @@ export function RiskExplorer({ data, classes }: { data: RiskData; classes: Asset
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <div className="min-w-[640px]">
+        <div>
+          <div>
             {/* axis + bands */}
-            <div className="relative ml-[118px] h-6">
-              {TICKS.map((t) => (
-                <span key={t} className="num absolute -translate-x-1/2 text-[10.5px] text-muted" style={{ left: `${X(t)}%` }}>{fmt(t)}</span>
-              ))}
+            <div className="flex">
+              <span className="w-[76px] shrink-0 sm:w-[118px]" />
+              <div className="relative h-6 flex-1">
+                {TICKS.map((t) => (
+                  <span key={t} className={`num absolute -translate-x-1/2 text-[10.5px] text-muted ${[0.0005, 0.005, 0.05].includes(t) ? "hidden sm:inline" : ""}`} style={{ left: `${X(t)}%` }}>{fmt(t)}</span>
+                ))}
+              </div>
+              <span className="w-12 shrink-0" />
             </div>
             {grouped.map(({ c, rows }) => (
               <div key={c} className="mt-3">
@@ -81,7 +85,7 @@ export function RiskExplorer({ data, classes }: { data: RiskData; classes: Asset
                           type="button"
                           onClick={() => toggle(a.name)}
                           aria-pressed={on}
-                          className={`num w-[110px] shrink-0 truncate rounded px-2 py-1 text-left text-[12.5px] ${on ? "bg-secondary text-secondary-text" : "text-text-2 hover:bg-nested hover:text-text"}`}
+                          className={`num w-[76px] shrink-0 truncate rounded px-2 py-1 text-left text-[12px] sm:w-[110px] sm:text-[12.5px] ${on ? "bg-secondary text-secondary-text" : "text-text-2 hover:bg-nested hover:text-text"}`}
                         >
                           {a.name}
                         </button>
@@ -96,15 +100,15 @@ export function RiskExplorer({ data, classes }: { data: RiskData; classes: Asset
                             style={{ left: `${X(pd(a))}%` }}
                             title={`${a.name}: ${fmt(pd(a))}`}
                           />
-                          <span className="num absolute top-1/2 -translate-y-1/2 pl-3 text-[11.5px] text-text" style={{ left: `${X(pd(a))}%` }}>{fmt(pd(a))}</span>
                         </div>
+                        <span className="num w-12 shrink-0 text-right text-[11.5px] text-text">{fmt(pd(a))}</span>
                       </li>
                     );
                   })}
                 </ul>
               </div>
             ))}
-            <div className="ml-[118px] mt-4 flex flex-wrap gap-3 text-[11px] text-text-2">
+            <div className="mt-4 flex flex-wrap gap-3 text-[11px] text-text-2 sm:ml-[118px]">
               {BANDS.map((b) => (
                 <span key={b.label} className="inline-flex items-center gap-1.5"><span className={`h-3 w-5 rounded-sm bg-nested ${b.cls}`} aria-hidden="true" />{b.label}</span>
               ))}
