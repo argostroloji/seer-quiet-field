@@ -39,7 +39,7 @@ export default async function OpportunityPage({ searchParams }: { searchParams: 
             <p className="font-medium">This page will judge itself.</p>
             <p className="mt-1 text-text-2">
               This design is an entry in Seer&apos;s six-interfaces contest. When submissions close, every entry becomes an outcome in a market like these.{" "}
-              <a href="https://poidh.xyz/mainnet/bounty/38" target="_blank" rel="noreferrer" className="text-signal underline-offset-4 hover:underline">poidh #38 ↗</a>
+              <a href="https://poidh.xyz/mainnet/bounty/38" target="_blank" rel="noreferrer" className="text-signal underline underline-offset-4">poidh #38 ↗</a>
             </p>
           </>
         }
