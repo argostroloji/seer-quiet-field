@@ -190,7 +190,7 @@ export function fmtNum(n: number, d = 2) {
 export function fmtDate(ts: number | null | undefined, withTime = false) {
   if (!ts) return "—";
   const d = new Date(ts * 1000);
-  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", ...(withTime ? { hour: "2-digit", minute: "2-digit", timeZone: "UTC" } : {}) }) + (withTime ? " UTC" : "");
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC", ...(withTime ? { hour: "2-digit", minute: "2-digit" } : {}) }) + (withTime ? " UTC" : "");
 }
 export function fmtRelative(ts: number | null | undefined) {
   if (!ts) return "—";

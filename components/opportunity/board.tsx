@@ -58,11 +58,11 @@ export function OpportunityBoard({ m }: { m: OppMarket }) {
               key={e.name}
               title={`${e.name} · ${pct(e.prob)}`}
               className="h-full border-r border-page/60 transition-[filter] hover:brightness-125"
-              style={{ width: `${(e.prob / band.total) * 100}%`, background: i < 6 ? COLORS[i] : `color-mix(in srgb, var(--primary) ${70 - i * 4}%, var(--nested))` }}
+              style={{ width: `${+((e.prob / band.total) * 100).toFixed(3)}%`, background: i < 6 ? COLORS[i] : `color-mix(in srgb, var(--primary) ${70 - i * 4}%, var(--nested))` }}
             />
           ))}
-          <div title={`${ranked.length - 12} other entries · ${pct(band.restP)}`} className="h-full bg-raised" style={{ width: `${(band.restP / band.total) * 100}%` }} />
-          {m.remainder > 0.001 && <div title={`Unassigned · ${pct(m.remainder)}`} className="stripes h-full bg-nested" style={{ width: `${(m.remainder / band.total) * 100}%` }} />}
+          <div title={`${ranked.length - 12} other entries · ${pct(band.restP)}`} className="h-full bg-raised" style={{ width: `${+((band.restP / band.total) * 100).toFixed(3)}%` }} />
+          {m.remainder > 0.001 && <div title={`Unassigned · ${pct(m.remainder)}`} className="stripes h-full bg-nested" style={{ width: `${+((m.remainder / band.total) * 100).toFixed(3)}%` }} />}
         </div>
         <ul className={`mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-text-2 ${blind ? "invisible" : ""}`}>
           {band.top.slice(0, 6).map((e, i) => (
@@ -131,7 +131,7 @@ export function OpportunityBoard({ m }: { m: OppMarket }) {
                         ) : (
                           <div className="flex items-center gap-2">
                             <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-nested" aria-hidden="true">
-                              <div className="h-full rounded-full bg-primary" style={{ width: `${Math.min(100, (e.prob / (ranked[0]?.prob || 1)) * 100)}%` }} />
+                              <div className="h-full rounded-full bg-primary" style={{ width: `${+(Math.min(100, (e.prob / (ranked[0]?.prob || 1)) * 100)).toFixed(3)}%` }} />
                             </div>
                             <span className="num w-12 text-right">{pct(e.prob)}</span>
                           </div>

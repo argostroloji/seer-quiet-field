@@ -169,7 +169,7 @@ function OutcomeTable({ m }: { m: Market }) {
               <td className="py-2 pr-3">
                 <div className="flex items-center gap-2">
                   <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-nested" aria-hidden="true">
-                    <div className="h-full rounded-full bg-primary" style={{ width: `${(o.prob ?? 0) * 100}%` }} />
+                    <div className="h-full rounded-full bg-primary" style={{ width: `${+((o.prob ?? 0) * 100).toFixed(3)}%` }} />
                   </div>
                   <span className="num w-12 text-right">{fmtPct(o.prob)}</span>
                 </div>

@@ -93,7 +93,7 @@ function BinaryRow({ m }: { m: Market }) {
         <span className="text-[11.5px] text-text-2">chance of “{a?.name}”</span>
       </div>
       <div className="mb-2 h-1 overflow-hidden rounded-full bg-nested" aria-hidden="true">
-        <div className="h-full rounded-full bg-primary" style={{ width: `${(pa ?? 0) * 100}%` }} />
+        <div className="h-full rounded-full bg-primary" style={{ width: `${+((pa ?? 0) * 100).toFixed(3)}%` }} />
       </div>
       <div className="grid grid-cols-2 gap-1.5">
         <span className="flex h-9 items-center justify-center gap-1.5 truncate rounded-md bg-primary px-2 text-[12.5px] text-on-primary">
@@ -121,7 +121,7 @@ function ScalarRow({ m }: { m: Market }) {
       <div className="relative h-6" aria-hidden="true">
         <div className="stripes absolute inset-x-0 top-2.5 h-1 rounded-full bg-nested" />
         {pos != null && (
-          <div className="absolute top-0 h-6 w-[3px] -translate-x-1/2 rounded-full bg-primary" style={{ left: `${Math.min(100, Math.max(0, pos * 100))}%` }} />
+          <div className="absolute top-0 h-6 w-[3px] -translate-x-1/2 rounded-full bg-primary" style={{ left: `${+(Math.min(100, Math.max(0, pos * 100))).toFixed(3)}%` }} />
         )}
       </div>
       <div className="num flex justify-between text-[10.5px] text-muted">

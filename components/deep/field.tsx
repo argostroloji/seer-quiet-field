@@ -103,7 +103,7 @@ export function DeepField({ repos }: { repos: DeepRepo[] }) {
               <span className="num w-6 text-right text-[11px] text-muted">{i + 1}</span>
               <a href={`https://github.com/${r.repo}`} target="_blank" rel="noreferrer" className={`min-w-0 flex-1 truncate text-[13px] hover:underline ${on ? "text-text" : "text-text-2"}`}>{r.repo}</a>
               <span className="h-1.5 w-20 overflow-hidden rounded-full bg-nested" aria-hidden="true">
-                <span className={`block h-full rounded-full ${on ? "bg-primary" : "bg-muted-line"}`} style={{ width: `${r.score * 100}%` }} />
+                <span className={`block h-full rounded-full ${on ? "bg-primary" : "bg-muted-line"}`} style={{ width: `${+(r.score * 100).toFixed(3)}%` }} />
               </span>
               <span className="num w-10 text-right text-[12.5px]">{pct(r.score)}</span>
             </li>

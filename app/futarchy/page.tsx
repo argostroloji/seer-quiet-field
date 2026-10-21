@@ -122,7 +122,7 @@ function Featured({ meta, prices }: { meta: ProposalMeta; prices: Sourced<Propos
               <div className="relative mt-8 h-20" role="img" aria-label={`Shared scale: pass ${p.pass.toFixed(2)}, fail ${p.fail.toFixed(2)} ${p.currency}`}>
                 <div className="absolute inset-x-0 top-7 h-px bg-line" />
                 {bandPct && (
-                  <div className="stripes absolute top-3 h-9 rounded-sm bg-nested/60" style={{ left: `${pos(base * (1 - bandPct))}%`, width: `${pos(base * (1 + bandPct)) - pos(base * (1 - bandPct))}%` }}>
+                  <div className="stripes absolute top-3 h-9 rounded-sm bg-nested/60" style={{ left: `${+(pos(base * (1 - bandPct))).toFixed(3)}%`, width: `${+(pos(base * (1 + bandPct)) - pos(base * (1 - bandPct))).toFixed(3)}%` }}>
                     <span className="num absolute left-1 top-[38px] whitespace-nowrap text-[10px] text-muted">neutral band ±{band}%</span>
                   </div>
                 )}
@@ -154,7 +154,7 @@ function Featured({ meta, prices }: { meta: ProposalMeta; prices: Sourced<Propos
             {p.passProb != null && (
               <div className="mt-6 max-w-md">
                 <div className="flex justify-between text-[12.5px]"><span className="text-text-2">Chance it passes (prediction pool)</span><span className="num">{(p.passProb * 100).toFixed(0)}%</span></div>
-                <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-nested"><div className="h-full rounded-full bg-primary" style={{ width: `${p.passProb * 100}%` }} /></div>
+                <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-nested"><div className="h-full rounded-full bg-primary" style={{ width: `${+(p.passProb * 100).toFixed(3)}%` }} /></div>
               </div>
             )}
           </>
@@ -201,7 +201,7 @@ function Branch({ label, value, unit, tone }: { label: string; value: number; un
 
 function Marker({ x, label, cls, dashed, below }: { x: number; label: string; cls: string; dashed?: boolean; below?: boolean }) {
   return (
-    <div className={`absolute flex -translate-x-1/2 items-center ${below ? "top-3 flex-col-reverse" : "-top-3 flex-col"}`} style={{ left: `${x}%` }}>
+    <div className={`absolute flex -translate-x-1/2 items-center ${below ? "top-3 flex-col-reverse" : "-top-3 flex-col"}`} style={{ left: `${+(x).toFixed(3)}%` }}>
       <span className="num text-[10.5px] text-text-2">{label}</span>
       <span className={`h-8 w-[3px] rounded-full ${cls} ${dashed ? "opacity-70" : ""}`} />
     </div>
@@ -261,7 +261,7 @@ function ProposalRow({ meta, prices, active }: { meta: ProposalMeta; prices: Sou
             <span className={`num text-[13px] ${gap >= 0 ? "text-signal" : "text-text-2"}`}>{gap >= 0 ? "+" : ""}{(gap * 100).toFixed(2)}%</span>
             <span className="relative mt-1 block h-1.5 rounded-full bg-nested" aria-hidden="true">
               <span className="absolute left-1/2 top-[-2px] h-2.5 w-px bg-muted-line" />
-              <span className={`absolute top-0 h-full rounded-full ${gap >= 0 ? "bg-primary" : "bg-text-2"}`} style={gap >= 0 ? { left: "50%", width: `${g * 50}%` } : { right: "50%", width: `${-g * 50}%` }} />
+              <span className={`absolute top-0 h-full rounded-full ${gap >= 0 ? "bg-primary" : "bg-text-2"}`} style={gap >= 0 ? { left: "50%", width: `${+(g * 50).toFixed(3)}%` } : { right: "50%", width: `${+(-g * 50).toFixed(3)}%` }} />
             </span>
           </>
         )}
