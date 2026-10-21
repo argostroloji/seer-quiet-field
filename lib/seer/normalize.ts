@@ -38,8 +38,8 @@ export function marketStatus(m: SeerMarketRaw, now = Date.now() / 1000): MarketS
 export function uiStatus(s: MarketStatus): "open" | "pending" | "disputed" | "resolved" | "closed" {
   switch (s) {
     case "not_open":
-      return "open";
     case "open":
+      return "open";
     case "answer_not_final":
     case "pending_execution":
       return "pending";
@@ -51,8 +51,8 @@ export function uiStatus(s: MarketStatus): "open" | "pending" | "disputed" | "re
 }
 
 export const STATUS_LABEL: Record<MarketStatus, string> = {
-  not_open: "Trading",
-  open: "Awaiting answer",
+  not_open: "Open",
+  open: "Open",
   answer_not_final: "Answer pending",
   in_dispute: "In dispute",
   pending_execution: "Pending payout",
@@ -169,7 +169,7 @@ export function normalizeMarket(m: SeerMarketRaw): Market {
 /** Outcomes a human cares about: hide "Invalid", sort by probability. */
 export function visibleOutcomes(m: Market, sort = true) {
   const v = m.outcomes.filter((o) => !o.isInvalid);
-  return sort ? [...v].sort((a, b) => (b.prob ?? -1) - (a.prob ?? -1)) : v;
+  return sort ? [...v].sort((a, b) => Number(!!b.won) - Number(!!a.won) || (b.prob ?? -1) - (a.prob ?? -1)) : v;
 }
 
 export function fmtUSD(n: number, compact = true) {
